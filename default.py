@@ -92,26 +92,72 @@ def Categories(): #70
 	if cTxt3 and cFonte3:
 		AddDir("[COLOR white][B]["+cTxt3+"][/B][/COLOR]" , "", 53, "", "https://ckneiferinstructional.files.wordpress.com/2010/12/tv-shows-completed1.jpg", info=info2)
 	AddDir("[COLOR orange][B][Clean Cache][/B][/COLOR]", "" ,666 , "https://lh5.ggpht.com/gv992ET6R_InCoMXXwIbdRLJczqOHFfLxIeY-bN2nFq0r8MDe-y-cF2aWq6Qy9P_K-4=w300", "https://lh5.ggpht.com/gv992ET6R_InCoMXXwIbdRLJczqOHFfLxIeY-bN2nFq0r8MDe-y-cF2aWq6Qy9P_K-4=w300", isFolder=False)
+	AddDir("[COLOR white][B][Animes][/B][/COLOR]", "" ,501 , "", "https://ckneiferinstructional.files.wordpress.com/2010/12/tv-shows-completed1.jpg")
 	if len(DirM) > 7:
 		AddDir("[COLOR green][B][Filmes Fav][/B][/COLOR]", "" ,352 , "", "https://ckneiferinstructional.files.wordpress.com/2010/12/tv-shows-completed1.jpg")
-	AddDir("[COLOR blue][B][Pokémon][/B][/COLOR]", "" ,501 , "", "https://ckneiferinstructional.files.wordpress.com/2010/12/tv-shows-completed1.jpg")
 	AddDir("[COLOR blue][B][Filmes][/B][/COLOR]", "" ,353 , "", "https://ckneiferinstructional.files.wordpress.com/2010/12/tv-shows-completed1.jpg")
-	AddDir("[COLOR orange][B][Atualiza][/B][/COLOR]" , "", 200, "https://accelerator-origin.kkomando.com/wp-content/uploads/2015/04/update2-970x546.jpg", "https://accelerator-origin.kkomando.com/wp-content/uploads/2015/04/update2-970x546.jpg", isFolder=False)
+	AddDir("[COLOR orange][B][Atualizar][/B][/COLOR]" , "", 200, "https://accelerator-origin.kkomando.com/wp-content/uploads/2015/04/update2-970x546.jpg", "https://accelerator-origin.kkomando.com/wp-content/uploads/2015/04/update2-970x546.jpg", isFolder=False)
 	AddDir("[COLOR maroon][B][Atualizar Biblioteca][/B][/COLOR]" , "", 101, "https://accelerator-origin.kkomando.com/wp-content/uploads/2015/04/update2-970x546.jpg", "https://accelerator-origin.kkomando.com/wp-content/uploads/2015/04/update2-970x546.jpg", isFolder=False)
-# --------------  501 Pokemon
-def poke():
-	AddDir("Reload" , "", 40, isFolder=False)
-	mu = MetadataUtils()
-	mmm = mu.get_tvshow_details("1429",ignore_cache=MUcache, lang=MUlang)
-	metasea=mergedicts(mmm[-1],mmm[3])
-	ST(metasea)
-	meta=metasea
-	trak = traktS()
-	#ST(metasea)
-	for x in range(1, 24):
-		pc = 1 if mmm[-1]['imdb_id'] in trak else None
-		#AddDir("[COLOR maroon]Reload[/COLOR]" , "https://servermonster.online/assistironline/pokemon_2019/pokemon_2019-episodio-10.mp4|Referer=https://flamengo81.com/flamengo-acerta-contratacao-de-mario-balotelli/", 3, isFolder=False, IsPlayable=True)
-		AddDir2("", "https://servermonster.online/assistironline/pokemon_2019/pokemon_2019-episodio-"+str(x)+".mp4|Referer=https://flamengo81.com/flamengo-acerta-contratacao-de-mario-balotelli/", 3, "", "", isFolder=False, IsPlayable=True, background="3", metah=meta, episode=str(x), playcount=pc)
+# --------------  501 Anime
+def anime():
+	#AddDir("Reload" , "", 40, isFolder=False)
+	try:
+		link = common.OpenURL("https://pastebin.com/raw/mPm5R3iQ")
+		#link = re.sub('(http.+)\s(http.+)\s(http.+)', r"\1;\2;\3", link )
+		#link = re.sub('(http.+)\s(http.+)', r"\1;\2", link )
+		lista = re.compile("(.+);(.*);(.*)\s(.+)").findall(link)
+		#ST(lista)
+		lista = sorted(lista, key=lambda lista: lista[0])
+		for name2,id2,season,url2 in lista:
+			try:
+				mg = MetadataUtils()
+				mmm = mg.get_tvshow_details(title=name2.replace("*",""),tmdb_id=id2, ignore_cache=MUcache, lang=MUlang)
+				metasea=mergedicts(mmm[-1],mmm[int(season)])
+				dubleg="yellow" if "dublado" in url2 else "blue"
+				AddDir2("[COLOR "+dubleg+"]["+season+"] "+metasea["TVShowTitle"].encode('utf-8')+"[/COLOR]", url2, 502, iconimage, iconimage, info="", isFolder=True, background=season, metah=metasea)
+			except:
+				pass
+	except urllib2.URLError, e:
+		AddDir("Não foi possível carregar" , "", 0, isFolder=False)
+def animeepis(): #502
+	#AddDir("Reload" , "", 40, isFolder=False)
+	try:
+		trak = traktS()
+		link = common.OpenURL(url)
+		lista = re.compile("[^']+\/download").findall(link)
+		E = 0
+		meta = eval(metah)
+		for l in lista:
+			E = E + 1
+			pc = 1 if meta['imdb_id']+str(meta['season_number'])+str(int(E)) in trak else None
+			AddDir2("" ,l, 503, "", "",  isFolder=False, IsPlayable=True, background=str(meta['season_number']), metah=meta, episode=str(E), DL="", playcount=pc)
+	except:
+		pass
+def playanime(): #503
+	try:
+		#ST(background)
+		qual = ["1080p (1)", "1080p (2)", "720p (1)", "720p (2)", "480p (1)", "480p (2)"]
+		d = xbmcgui.Dialog().select("Escolha a qualidade:", qual)
+		url2 = url
+		if "(2)" in qual[d]:
+			url2 = re.sub('download$', "", url )
+		qual[d] = re.sub(' \(.\)', "", qual[d] )
+		link = common.OpenURL(url2)
+		mp4 = re.compile('[^"|\']+\.mp4[^"|\'|\n]*').findall(link)
+		if d > -1 :
+			mp4_ = re.sub('\/.{3,4}p\/', "/"+qual[d]+"/", mp4[0] )
+		else:
+			sys.exit()
+		if len(str(metah)) > 10:
+			mm = eval(metah)
+			mm['title']=mm['TVShowTitle']
+		else:
+			mg = metahandlers.MetaData()
+			mm = mg.get_meta('movie', "", tmdb_id=iconimage)
+		PlayUrl("", mp4_ + "|referer=http://animesvision.biz/&User-Agent=Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100110 Firefox/11.0", iconimage) 
+	except:
+		NF("Erro")
+		sys.exit()
 # --------------  Trakt
 def traktS():
 	if not Ctrakt:
@@ -1408,7 +1454,7 @@ def RemoveFromLists(i):
 def Update(): #200
 	Path = xbmc.translatePath( xbmcaddon.Addon().getAddonInfo('path') ).decode("utf-8")
 	try:
-		fonte = common.OpenURL( "https://pastebin.com/raw/6aHzYAFW" )
+		fonte = common.OpenURL( "https://raw.githubusercontent.com/D4anielCB/CBm/main/default.py" )
 		prog = re.compile('#checkintegritycbmeta').findall(fonte)
 		if prog:
 			py = os.path.join( Path, "default.py")
@@ -1691,8 +1737,13 @@ elif mode == 405:
 elif mode == 409:
 	LatestSSF()
 	setViewS2()
-elif mode == 501: #pokemon
-	poke()
+elif mode == 501: #anime
+	anime()
+	setViewS()
+elif mode == 502: #anime
+	animeepis()
 	setViewS2()
+elif mode == 503: #playanime
+	playanime()
 xbmcplugin.endOfDirectory(int(sys.argv[1]))
 #checkintegritycbmeta
