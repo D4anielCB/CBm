@@ -135,9 +135,11 @@ def animeepis(): #502
 		pass
 def playanime(): #503
 	try:
-		#ST(background)
 		qual = ["1080p (1)", "1080p (2)", "720p (1)", "720p (2)", "480p (1)", "480p (2)"]
-		d = xbmcgui.Dialog().select("Escolha a qualidade:", qual)
+		if XBMCPlayer().isPlaying():
+			d = 0
+		else:
+			d = xbmcgui.Dialog().select("Escolha a qualidade:", qual)
 		url2 = url
 		if "(2)" in qual[d]:
 			url2 = re.sub('download$', "", url )
@@ -632,6 +634,8 @@ def PlaySRC(qq=""): #133 Play series
 			player = re.sub('redecanais\.[^\/]+', "gamesgo.fun", player)
 			mp4 = common.OpenURL(player ,headers={'referer': RCref})
 			try:
+				if XBMCPlayer().isPlaying():
+					f="1"+1
 				player = re.compile('href.{1,5}(mega[^"|\']*)').findall(mp4)
 				mp42 = common.OpenURL("https://gamesgo.fun/player3/"+player[0] ,headers={'referer': RCref})
 				source = re.compile('source.+').findall(mp42)
