@@ -95,7 +95,7 @@ def Categories(): #70
 	AddDir("[COLOR white][B][Animes][/B][/COLOR]", "" ,501 , "", "https://ckneiferinstructional.files.wordpress.com/2010/12/tv-shows-completed1.jpg")
 	if len(DirM) > 7:
 		AddDir("[COLOR green][B][Filmes Fav][/B][/COLOR]", "" ,352 , "", "https://ckneiferinstructional.files.wordpress.com/2010/12/tv-shows-completed1.jpg")
-	AddDir("[COLOR blue][B][Filmes][/B][/COLOR]", "" ,353 , "", "https://ckneiferinstructional.files.wordpress.com/2010/12/tv-shows-completed1.jpg")
+		AddDir("[COLOR blue][B][Filmes][/B][/COLOR]", "" ,353 , "", "https://ckneiferinstructional.files.wordpress.com/2010/12/tv-shows-completed1.jpg")
 	AddDir("[COLOR orange][B][Atualizar][/B][/COLOR]" , "", 200, "https://accelerator-origin.kkomando.com/wp-content/uploads/2015/04/update2-970x546.jpg", "https://accelerator-origin.kkomando.com/wp-content/uploads/2015/04/update2-970x546.jpg", isFolder=False)
 	AddDir("[COLOR maroon][B][Atualizar Biblioteca][/B][/COLOR]" , "", 101, "https://accelerator-origin.kkomando.com/wp-content/uploads/2015/04/update2-970x546.jpg", "https://accelerator-origin.kkomando.com/wp-content/uploads/2015/04/update2-970x546.jpg", isFolder=False)
 # --------------  501 Anime
@@ -1146,8 +1146,8 @@ def baixarsf(link=""):
 	return py
 # ----------------- FIM Superflix
 def PlayUrl(name, url, iconimage=None, info='', sub=''):
-	if DirM in url:
-		sub=re.sub('\..{3}$', '.srt', url)
+	#if DirM in url:
+		#sub=re.sub('\..{3}$', '.srt', url)
 	#url = re.sub('\.mp4$', '.mp4?play', url)
 	url = common.getFinalUrl(url)
 	xbmc.log('--- Playing "{0}". {1}'.format(name, url), 2)
@@ -1182,11 +1182,10 @@ def PlayUrl(name, url, iconimage=None, info='', sub=''):
 				listitem.setArt({'thumb' : iconimage})
 			except:
 				listitem.setThumbnailImage(iconimage)
-	if sub!='':
-		listitem.setSubtitles(['special://temp/example.srt', sub ])
+	#if sub!='':
+		#listitem.setSubtitles(['special://temp/example.srt', sub ])
 	xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, listitem)
-	
-	player = XBMCPlayer()
+	'''player = XBMCPlayer()
 	xbmc.sleep(500)
 	monitor = xbmc.Monitor()
 	while not monitor.abortRequested():
@@ -1196,7 +1195,7 @@ def PlayUrl(name, url, iconimage=None, info='', sub=''):
 		#xbmc.log("hello addon! %s" % time.time(), level=xbmc.LOGNOTICE)
 		if not player.isPlaying():
 			xbmc.sleep(500)
-			break
+			break'''
 def Data(x):
 	x = eInfo = re.sub('\d\d(\d+)\-(\d+)\-(\d+)', r'\3/\2/\1', x )
 	return "[COLOR yellow]("+x+")[/COLOR]"
