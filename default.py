@@ -99,7 +99,28 @@ def Categories(): #70
 	AddDir("[COLOR orange][B][Atualizar][/B][/COLOR]" , "", 200, "https://accelerator-origin.kkomando.com/wp-content/uploads/2015/04/update2-970x546.jpg", "https://accelerator-origin.kkomando.com/wp-content/uploads/2015/04/update2-970x546.jpg", isFolder=False)
 	AddDir("[COLOR maroon][B][Atualizar Biblioteca][/B][/COLOR]" , "", 101, "https://accelerator-origin.kkomando.com/wp-content/uploads/2015/04/update2-970x546.jpg", "https://accelerator-origin.kkomando.com/wp-content/uploads/2015/04/update2-970x546.jpg", isFolder=False)
 # --------------  501 Anime
-def anime():
+def playanimenext(): #504
+	try:
+		trak = traktS()
+		link = common.OpenURL(url)
+		lista = re.compile("[^']+\/download").findall(link)
+		E = 0
+		meta = eval(metah)
+		for l in lista:
+			E = E + 1
+			pc = 1 if meta['imdb_id']+str(meta['season_number'])+str(int(E)) in trak else None
+			if pc == None:
+				global url, episode, background, playcount
+				playcount = pc
+				episode = str(E)
+				url = l
+				playanime()
+				return
+				sys.exit()
+	except:
+		sys.exit()
+	NF("Temporada Completa")
+def anime(): #501
 	#AddDir("Reload" , "", 40, isFolder=False)
 	try:
 		link = common.OpenURL("https://pastebin.com/raw/mPm5R3iQ")
@@ -117,6 +138,17 @@ def anime():
 				AddDir2("[COLOR "+dubleg+"]["+season+"] "+metasea["TVShowTitle"].encode('utf-8')+"[/COLOR]", url2, 502, iconimage, iconimage, info="", isFolder=True, background=season, metah=metasea)
 			except:
 				pass
+		if Ctrakt != "":
+			AddDir("Autoplay" , "", 40, isFolder=False)
+			for name2,id2,season,url2 in lista:
+				try:
+					mg = MetadataUtils()
+					mmm = mg.get_tvshow_details(title=name2.replace("*",""),tmdb_id=id2, ignore_cache=MUcache, lang=MUlang)
+					metasea=mergedicts(mmm[-1],mmm[int(season)])
+					dubleg="yellow" if "dublado" in url2 else "blue"
+					AddDir2("[COLOR "+dubleg+"]["+season+"] ► "+metasea["TVShowTitle"].encode('utf-8')+"[/COLOR]", url2, 504, "", "", info="", isFolder=False, IsPlayable=True, background=season, metah=metasea)
+				except:
+					pass
 	except urllib2.URLError, e:
 		AddDir("Não foi possível carregar" , "", 0, isFolder=False)
 def animeepis(): #502
@@ -150,12 +182,6 @@ def playanime(): #503
 			mp4_ = re.sub('\/.{3,4}p\/', "/"+qual[d]+"/", mp4[0] )
 		else:
 			sys.exit()
-		if len(str(metah)) > 10:
-			mm = eval(metah)
-			mm['title']=mm['TVShowTitle']
-		else:
-			mg = metahandlers.MetaData()
-			mm = mg.get_meta('movie', "", tmdb_id=iconimage)
 		PlayUrl("", mp4_ + "|referer=http://animesvision.biz/&User-Agent=Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100110 Firefox/11.0", iconimage) 
 	except:
 		NF("Erro")
@@ -178,8 +204,7 @@ def traktS():
 					trak.append(m['show']['ids']['imdb']+str(Sea['number'])+str(epi['number']))
 		except:
 			pass
-	return trak
-	
+	return trak	
 def traktM():
 	#if not Ctrakt:
 	#	return []
@@ -607,9 +632,8 @@ def PlayNextRC(): #138 Next
 			meta=eval(metah)
 			pc = 1 if meta['imdb_id']+background+str(int(E)) in trak else None
 			if pc == None:
-				global url, episode, name, background, playcount
+				global url, episode, background, playcount
 				playcount = pc
-				name=""
 				episode = E
 				url = "http://redecanais.cloud/" + urlm[0][0] if "http" not in urlm[0][0] else urlm[0][0]
 				PlaySRC(" - Epi. "+str(ee)+"/"+str(len(epi)))
@@ -1748,5 +1772,7 @@ elif mode == 502: #anime
 	setViewS2()
 elif mode == 503: #playanime
 	playanime()
+elif mode == 504: 
+	playanimenext()
 xbmcplugin.endOfDirectory(int(sys.argv[1]))
 #checkintegritycbmeta
