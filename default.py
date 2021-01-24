@@ -148,8 +148,7 @@ def anime(): #501
 					mg = MetadataUtils()
 					mmm = mg.get_tvshow_details(title=name2.replace("*",""),tmdb_id=id2, ignore_cache=MUcache, lang=MUlang)
 					metasea=mergedicts(mmm[-1],mmm[int(season)])
-					dubleg="yellow" if "dublado" in url2 else "blue"
-					AddDir2("[COLOR "+dubleg+"]["+season+"] ► "+metasea["TVShowTitle"].encode('utf-8')+"[/COLOR]", url2, 504, "", "", info="", isFolder=False, IsPlayable=True, background=season, metah=metasea)
+					AddDir2("["+season+"] "+metasea["TVShowTitle"].encode('utf-8'), url2, 504, "", "", info="", isFolder=False, IsPlayable=True, background=season, metah=metasea)
 				except:
 					pass
 	except urllib2.URLError, e:
