@@ -105,8 +105,10 @@ def playanimenext(): #504
 		link = common.OpenURL(url)
 		lista = re.compile("[^']+\/download").findall(link)
 		E = 0
+		ee = 0
 		meta = eval(metah)
 		for l in lista:
+			ee = ee + 1
 			E = E + 1
 			pc = 1 if meta['imdb_id']+str(meta['season_number'])+str(int(E)) in trak else None
 			if pc == None:
@@ -114,6 +116,7 @@ def playanimenext(): #504
 				playcount = pc
 				episode = str(E)
 				url = l
+				NF( "Epi. "+str(ee)+"/"+ str( len(lista) ) )
 				playanime()
 				return
 				sys.exit()
