@@ -117,12 +117,13 @@ def playanimenext(): #504
 				episode = str(E)
 				url = l
 				NF( "Epi. "+str(ee)+"/"+ str( len(lista) ) )
-				playanime()
+				playanime(play=True)
 				return
 				sys.exit()
 	except:
 		sys.exit()
 	NF("Temporada Completa")
+	sys.exit()
 def anime(): #501
 	#AddDir("Reload" , "", 40, isFolder=False)
 	try:
@@ -167,10 +168,10 @@ def animeepis(): #502
 			AddDir2("" ,l, 503, "", "",  isFolder=False, IsPlayable=True, background=str(meta['season_number']), metah=meta, episode=str(E), DL="", playcount=pc)
 	except:
 		pass
-def playanime(): #503
+def playanime(play=False): #503
 	try:
 		qual = ["1080p (1)", "1080p (2)", "720p (1)", "720p (2)", "480p (1)", "480p (2)"]
-		if XBMCPlayer().isPlaying():
+		if XBMCPlayer().isPlaying() or play==True:
 			d = 0
 		else:
 			d = xbmcgui.Dialog().select("Escolha a qualidade:", qual)
