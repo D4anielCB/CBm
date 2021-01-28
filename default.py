@@ -104,22 +104,23 @@ def playanimenext(): #504
 		trak = traktS()
 		link = common.OpenURL(url)
 		lista = re.compile("[^']+\/download").findall(link)
-		E = 0
-		ee = 0
+		E = 1
+		i = re.compile('i\=(\d+)').findall(url)
+		if i:
+			E = int(i[0])
 		meta = eval(metah)
 		for l in lista:
-			ee = ee + 1
-			E = E + 1
 			pc = 1 if meta['imdb_id']+str(meta['season_number'])+str(int(E)) in trak else None
 			if pc == None:
 				global url, episode, background, playcount
 				playcount = pc
 				episode = str(E)
 				url = l
-				NF( "Epi. "+str(ee)+"/"+ str( len(lista) ) )
+				NF( "Epi. "+str(E)+"/"+ str( len(lista)+E-1 ) )
 				playanime(play=True)
 				return
 				sys.exit()
+			E = E + 1
 	except:
 		sys.exit()
 	NF("Temporada Completa")
@@ -139,7 +140,8 @@ def anime(): #501
 				mmm = mg.get_tvshow_details(title=name2.replace("*",""),tmdb_id=id2, ignore_cache=MUcache, lang=MUlang)
 				metasea=mergedicts(mmm[-1],mmm[int(season)])
 				dubleg="yellow" if "dublado" in url2 else "blue"
-				AddDir2("[COLOR "+dubleg+"]["+season+"] "+metasea["TVShowTitle"].encode('utf-8')+"[/COLOR]", url2, 502, iconimage, iconimage, info="", isFolder=True, background=season, metah=metasea)
+				plus = "+" if "i=" in url2 else ""
+				AddDir2("[COLOR "+dubleg+"]["+season+"]"+plus+" "+metasea["TVShowTitle"].encode('utf-8')+"[/COLOR]", url2, 502, iconimage, iconimage, info="", isFolder=True, background=season, metah=metasea)
 			except:
 				pass
 		if Ctrakt != "":
@@ -149,23 +151,27 @@ def anime(): #501
 					mg = MetadataUtils()
 					mmm = mg.get_tvshow_details(title=name2.replace("*",""),tmdb_id=id2, ignore_cache=MUcache, lang=MUlang)
 					metasea=mergedicts(mmm[-1],mmm[int(season)])
-					AddDir2("["+season+"] "+metasea["TVShowTitle"].encode('utf-8'), url2, 504, "", "", info="", isFolder=False, IsPlayable=True, background=season, metah=metasea)
+					plus = "+" if "i=" in url2 else ""
+					AddDir2("["+season+"]"+plus+" "+metasea["TVShowTitle"].encode('utf-8'), url2, 504, "", "", info="", isFolder=False, IsPlayable=True, background=season, metah=metasea)
 				except:
 					pass
 	except urllib2.URLError, e:
 		AddDir("Não foi possível carregar" , "", 0, isFolder=False)
 def animeepis(): #502
-	#AddDir("Reload" , "", 40, isFolder=False)
+	AddDir("Reload" , "", 40, isFolder=False)
 	try:
 		trak = traktS()
 		link = common.OpenURL(url)
 		lista = re.compile("[^']+\/download").findall(link)
-		E = 0
+		E = 1
+		i = re.compile('i\=(\d+)').findall(url)
+		if i:
+			E = int(i[0])
 		meta = eval(metah)
 		for l in lista:
-			E = E + 1
 			pc = 1 if meta['imdb_id']+str(meta['season_number'])+str(int(E)) in trak else None
 			AddDir2("" ,l, 503, "", "",  isFolder=False, IsPlayable=True, background=str(meta['season_number']), metah=meta, episode=str(E), DL="", playcount=pc)
+			E = E + 1
 	except:
 		pass
 def playanime(play=False): #503
@@ -1467,6 +1473,8 @@ def CleanCache(): #666
 		
 def Refresh():
 	xbmc.executebuiltin("XBMC.Container.Refresh()")
+	#Addon.setSetting("MUcache", "false" )
+	#Addon.setSetting("MUcacheEpi", "false" )
 
 def RemoveFromLists(i):
 	index = int(i)
