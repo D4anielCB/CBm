@@ -92,14 +92,14 @@ def Categories(): #70
 	if cTxt3 and cFonte3:
 		AddDir("[COLOR white][B]["+cTxt3+"][/B][/COLOR]" , "", 53, "", "https://ckneiferinstructional.files.wordpress.com/2010/12/tv-shows-completed1.jpg", info=info2)
 	AddDir("[COLOR orange][B][Clean Cache][/B][/COLOR]", "" ,666 , "https://lh5.ggpht.com/gv992ET6R_InCoMXXwIbdRLJczqOHFfLxIeY-bN2nFq0r8MDe-y-cF2aWq6Qy9P_K-4=w300", "https://lh5.ggpht.com/gv992ET6R_InCoMXXwIbdRLJczqOHFfLxIeY-bN2nFq0r8MDe-y-cF2aWq6Qy9P_K-4=w300", isFolder=False)
-	AddDir("[COLOR white][B][Animes][/B][/COLOR]", "" ,501 , "", "https://ckneiferinstructional.files.wordpress.com/2010/12/tv-shows-completed1.jpg")
+	AddDir("[COLOR white][B][Animes][/B][/COLOR]", "" ,500 , "", "https://ckneiferinstructional.files.wordpress.com/2010/12/tv-shows-completed1.jpg")
 	if len(DirM) > 7:
 		AddDir("[COLOR green][B][Filmes Fav][/B][/COLOR]", "" ,352 , "", "https://ckneiferinstructional.files.wordpress.com/2010/12/tv-shows-completed1.jpg")
 		AddDir("[COLOR blue][B][Filmes][/B][/COLOR]", "" ,353 , "", "https://ckneiferinstructional.files.wordpress.com/2010/12/tv-shows-completed1.jpg")
 	AddDir("[COLOR orange][B][Atualizar][/B][/COLOR]" , "", 200, "https://accelerator-origin.kkomando.com/wp-content/uploads/2015/04/update2-970x546.jpg", "https://accelerator-origin.kkomando.com/wp-content/uploads/2015/04/update2-970x546.jpg", isFolder=False)
 	AddDir("[COLOR maroon][B][Atualizar Biblioteca][/B][/COLOR]" , "", 101, "https://accelerator-origin.kkomando.com/wp-content/uploads/2015/04/update2-970x546.jpg", "https://accelerator-origin.kkomando.com/wp-content/uploads/2015/04/update2-970x546.jpg", isFolder=False)
-# --------------  501 Anime
-def playanimenext(): #504
+# --------------  Animes
+def playanimenextvis(): #504
 	try:
 		trak = traktS()
 		link = common.OpenURL(url)
@@ -117,7 +117,7 @@ def playanimenext(): #504
 				episode = str(E)
 				url = l
 				NF( "Epi. "+str(E)+"/"+ str( len(lista)+E-1 ) )
-				playanime(play=True)
+				playanimevis(play=True)
 				return
 				sys.exit()
 			E = E + 1
@@ -125,40 +125,49 @@ def playanimenext(): #504
 		sys.exit()
 	NF("Temporada Completa")
 	sys.exit()
-def anime(): #501
-	#AddDir("Reload" , "", 40, isFolder=False)
+def listanimevis(): #500
 	try:
-		link = common.OpenURL("https://pastebin.com/raw/mPm5R3iQ")
-		#link = re.sub('(http.+)\s(http.+)\s(http.+)', r"\1;\2;\3", link )
-		#link = re.sub('(http.+)\s(http.+)', r"\1;\2", link )
-		lista = re.compile("(.+);(.*);(.*)\s(.+)").findall(link)
-		#ST(lista)
+		link = common.OpenURL("https://pastebin.com/raw/nrC8aGLT").replace("\n","+")
+		lista = re.compile("\*?(.+?);(\d+)?;\+(.+?)\*").findall(link)
 		lista = sorted(lista, key=lambda lista: lista[0])
-		for name2,id2,season,url2 in lista:
+		for name2,id2,cont in lista:
 			try:
 				mg = MetadataUtils()
-				mmm = mg.get_tvshow_details(title=name2.replace("*",""),tmdb_id=id2, ignore_cache=MUcache, lang=MUlang)
-				metasea=mergedicts(mmm[-1],mmm[int(season)])
-				dubleg="yellow" if "dublado" in url2 else "blue"
-				plus = "+" if "i=" in url2 else ""
-				AddDir2("[COLOR "+dubleg+"]["+season+"]"+plus+" "+metasea["TVShowTitle"].encode('utf-8')+"[/COLOR]", url2, 502, iconimage, iconimage, info="", isFolder=True, background=season, metah=metasea)
+				mmm = mg.get_tvshow_details(title=name2,tmdb_id=id2, ignore_cache=MUcache, lang=MUlang)
+				dubleg="D" if "dublado" in cont else "L"
+				AddDir2("["+dubleg+"] "+mmm[-1]["TVShowTitle"].encode('utf-8'), cont, 501, iconimage, iconimage, info="", isFolder=True, background=background, metah=mmm[-1])
 			except:
 				pass
-		if Ctrakt != "":
-			AddDir("Autoplay" , "", 40, isFolder=False)
-			for name2,id2,season,url2 in lista:
-				try:
-					mg = MetadataUtils()
-					mmm = mg.get_tvshow_details(title=name2.replace("*",""),tmdb_id=id2, ignore_cache=MUcache, lang=MUlang)
-					metasea=mergedicts(mmm[-1],mmm[int(season)])
-					plus = "+" if "i=" in url2 else ""
-					AddDir2("["+season+"]"+plus+" "+metasea["TVShowTitle"].encode('utf-8'), url2, 504, "", "", info="", isFolder=False, IsPlayable=True, background=season, metah=metasea)
-				except:
-					pass
-	except urllib2.URLError, e:
-		AddDir("Não foi possível carregar" , "", 0, isFolder=False)
-def animeepis(): #502
-	AddDir("Reload" , "", 40, isFolder=False)
+	except:
+		pass
+	return
+def listseavis(): #501
+	lista = re.compile("(\d+);(.+?)\+").findall(url)
+	for season,url2 in lista:
+		try:
+			meta = eval(metah)
+			mg = MetadataUtils()
+			mmm = mg.get_tvshow_details(title="",tmdb_id=meta['tmdb_id'], ignore_cache=MUcache, lang=MUlang)
+			metasea=mergedicts(meta,mmm[int(season)])
+			dubleg="D" if "dublado" in url2 else "L"
+			plus = "+" if "i=" in url2 else ""
+			AddDir2("["+dubleg+"]["+season+"]"+plus+" "+metasea["TVShowTitle"].encode('utf-8'), url2, 502, iconimage, iconimage, info="", isFolder=True, background=season, metah=metasea)
+		except:
+			pass
+	if Ctrakt != "":
+		AddDir("---------- Autoplay ----------" , "", 40, isFolder=False)
+		for season,url2 in lista:
+			try:
+				meta = eval(metah)
+				mg = MetadataUtils()
+				mmm = mg.get_tvshow_details(title="",tmdb_id=meta['tmdb_id'], ignore_cache=MUcache, lang=MUlang)
+				metasea=mergedicts(meta,mmm[int(season)])
+				dubleg="D" if "dublado" in url2 else "L"
+				plus = "+" if "i=" in url2 else ""
+				AddDir2("["+dubleg+"]["+season+"]"+plus+" "+metasea["TVShowTitle"].encode('utf-8'), url2, 504, "", "", info="", isFolder=False, IsPlayable=True, background=season, metah=metasea)
+			except:
+				pass
+def animeepisvis(): #502
 	try:
 		trak = traktS()
 		link = common.OpenURL(url)
@@ -174,7 +183,7 @@ def animeepis(): #502
 			E = E + 1
 	except:
 		pass
-def playanime(play=False): #503
+def playanimevis(play=False): #503
 	try:
 		qual = ["1080p (1)", "1080p (2)", "720p (1)", "720p (2)", "480p (1)", "480p (2)"]
 		if XBMCPlayer().isPlaying() or play==True:
@@ -1775,15 +1784,18 @@ elif mode == 405:
 elif mode == 409:
 	LatestSSF()
 	setViewS2()
+elif mode == 500: #anime
+	listanimevis()
+	setViewS()
 elif mode == 501: #anime
-	anime()
+	listseavis()
 	setViewS()
 elif mode == 502: #anime
-	animeepis()
+	animeepisvis()
 	setViewS2()
 elif mode == 503: #playanime
-	playanime()
+	playanimevis()
 elif mode == 504: 
-	playanimenext()
+	playanimenextvis()
 xbmcplugin.endOfDirectory(int(sys.argv[1]))
 #checkintegritycbmeta
