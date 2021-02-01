@@ -136,14 +136,20 @@ def listanimevis(): #500
 				mg = MetadataUtils()
 				mmm = mg.get_tvshow_details(title=name2,tmdb_id=id2, ignore_cache=MUcache, lang=MUlang)
 				dubleg="D" if "dublado" in cont else "L"
-				AddDir2("["+dubleg+"] "+mmm[-1]["TVShowTitle"].encode('utf-8'), cont, 501, iconimage, iconimage, info="", isFolder=True, background=background, metah=mmm[-1])
+				AddDir2("["+dubleg+"] "+mmm[-1]["TVShowTitle"].encode('utf-8'), id2, 501, iconimage, iconimage, info="", isFolder=True, background=background, metah=mmm[-1])
 			except:
 				pass
 	except:
 		pass
 	return
 def listseavis(): #501
-	lista = re.compile("(\d+);(.+?)\+").findall(url)
+	link = common.OpenURL("https://pastebin.com/raw/nrC8aGLT").replace("\n","+")
+	lista = re.compile("\*?(.+?);(\d+)?;\+(.+?)\*").findall(link)
+	lista = sorted(lista, key=lambda lista: lista[0])
+	for name2,id2,cont2 in lista:
+		if id2 == url:
+			cont1 = cont2
+	lista = re.compile("(\d+);(.+?)\+").findall(cont1)
 	for season,url2 in lista:
 		try:
 			meta = eval(metah)
@@ -186,19 +192,15 @@ def animeepisvis(): #502
 		pass
 def playanimevis(play=False): #503
 	try:
-		qual = ["1080p (1)", "1080p (2)", "720p (1)", "720p (2)", "480p (1)", "480p (2)"]
+		link = common.OpenURL(url)
+		mp4 = re.compile('[^"|\']+\.mp4[^"|\'|\n]*').findall(link)
+		qual = re.compile('\/(.{3,4}p)\/').findall( str(mp4) )
 		if XBMCPlayer().isPlaying() or play==True:
 			d = 0
 		else:
 			d = xbmcgui.Dialog().select("Escolha a qualidade:", qual)
-		url2 = url
-		if "(2)" in qual[d]:
-			url2 = re.sub('download$', "", url )
-		qual[d] = re.sub(' \(.\)', "", qual[d] )
-		link = common.OpenURL(url2)
-		mp4 = re.compile('[^"|\']+\.mp4[^"|\'|\n]*').findall(link)
 		if d > -1 :
-			mp4_ = re.sub('\/.{3,4}p\/', "/"+qual[d]+"/", mp4[0] )
+			mp4_ = mp4[d]
 		else:
 			sys.exit()
 		PlayUrl("", mp4_ + "|referer=http://animesvision.biz/&User-Agent=Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100110 Firefox/11.0", iconimage) 
