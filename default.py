@@ -108,6 +108,7 @@ def playanimenextvis(): #504
 		i = re.compile('i\=(\d+)').findall(url)
 		if i:
 			E = int(i[0])
+		totalepi = str( len(lista)+E-1 )
 		meta = eval(metah)
 		for l in lista:
 			pc = 1 if meta['imdb_id']+str(meta['season_number'])+str(int(E)) in trak else None
@@ -116,7 +117,7 @@ def playanimenextvis(): #504
 				playcount = pc
 				episode = str(E)
 				url = l
-				NF( "Epi. "+str(E)+"/"+ str( len(lista)+E-1 ) )
+				NF( "Epi. "+str(E)+"/"+ totalepi )
 				playanimevis(play=True)
 				return
 				sys.exit()
