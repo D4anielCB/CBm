@@ -195,7 +195,7 @@ def playanimevis(play=False): #503
 		link = common.OpenURL(url)
 		mp4 = re.compile('[^"|\']+\.mp4[^"|\'|\n]*').findall(link)
 		qual = re.compile('\/(.{3,4}p)\/').findall( str(mp4) )
-		if XBMCPlayer().isPlaying() or play==True:
+		if XBMCPlayer().isPlaying() or play==True or len(qual)==1:
 			d = 0
 		else:
 			d = xbmcgui.Dialog().select("Escolha a qualidade:", qual)
