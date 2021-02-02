@@ -156,9 +156,11 @@ def listseavis(): #501
 			mg = MetadataUtils()
 			mmm = mg.get_tvshow_details(title="",tmdb_id=meta['tmdb_id'], ignore_cache=MUcache, lang=MUlang)
 			metasea=mergedicts(meta,mmm[int(season)])
-			dubleg="D" if "dublado" in url2 else "L"
+			dubleg="[COLOR yellow][D][/COLOR]" if "dublado" in url2 else "[COLOR blue][L][/COLOR]"
 			plus = "+" if "i=" in url2 else ""
-			AddDir2("["+dubleg+"]["+season+"]"+plus+" "+metasea["TVShowTitle"].encode('utf-8'), url2, 502, iconimage, iconimage, info="", isFolder=True, background=season, metah=metasea)
+			AddDir2(dubleg+"["+season+"]"+plus+" "+metasea["TVShowTitle"].encode('utf-8'), url2, 502, iconimage, iconimage, info="", isFolder=True, background=season, metah=metasea)
+			if "dublado" in url2:
+				AddDir2("[COLOR blue][L][/COLOR]["+season+"]"+plus+" "+metasea["TVShowTitle"].encode('utf-8'), url2.replace("-dublado",""), 502, iconimage, iconimage, info="", isFolder=True, background=season, metah=metasea)
 		except:
 			pass
 	if Ctrakt != "":
@@ -169,9 +171,11 @@ def listseavis(): #501
 				mg = MetadataUtils()
 				mmm = mg.get_tvshow_details(title="",tmdb_id=meta['tmdb_id'], ignore_cache=MUcache, lang=MUlang)
 				metasea=mergedicts(meta,mmm[int(season)])
-				dubleg="D" if "dublado" in url2 else "L"
+				dubleg="[COLOR yellow][D][/COLOR]" if "dublado" in url2 else "[COLOR blue][L][/COLOR]"
 				plus = "+" if "i=" in url2 else ""
-				AddDir2("["+dubleg+"]["+season+"]"+plus+" "+metasea["TVShowTitle"].encode('utf-8'), url2, 504, "", "", info="", isFolder=False, IsPlayable=True, background=season, metah=metasea)
+				AddDir2(dubleg+"["+season+"]"+plus+" "+metasea["TVShowTitle"].encode('utf-8'), url2, 504, "", "", info="", isFolder=False, IsPlayable=True, background=season, metah=metasea)
+				if "dublado" in url2:
+					AddDir2("[COLOR blue][L][/COLOR]["+season+"]"+plus+" "+metasea["TVShowTitle"].encode('utf-8'), url2, 504, "", "", info="", isFolder=False, IsPlayable=True, background=season, metah=metasea)
 			except:
 				pass
 def animeepisvis(): #502
@@ -1336,7 +1340,7 @@ def AddDir2(name, url, mode, iconimage='', logos='', index="", move=0, isFolder=
 			eInfo2.pop('cast', 1)
 			liz.setInfo( type="Video", infoLabels= eInfo2 )
 		else:
-			liz=xbmcgui.ListItem(DL +" "+name, iconImage=metah['cover_url'], thumbnailImage=metah['cover_url'])
+			liz=xbmcgui.ListItem(DL +""+name, iconImage=metah['cover_url'], thumbnailImage=metah['cover_url'])
 			liz.setArt({"poster": metah['cover_url'], "banner": metah['cover_url'], "fanart": metah['backdrop_url'] })
 			if "cast" in metah:
 				liz.setCast(metah['cast'])
