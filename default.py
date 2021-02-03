@@ -118,7 +118,7 @@ def playanimenextvis(): #504
 				episode = str(E)
 				url = l
 				NF( "Epi. "+str(E)+"/"+ totalepi )
-				playanimevis(play=True)
+				playanimevisauto()
 				return
 				sys.exit()
 			E = E + 1
@@ -135,8 +135,8 @@ def listanimevis(): #500
 			try:
 				mg = MetadataUtils()
 				mmm = mg.get_tvshow_details(title=name2,tmdb_id=id2, ignore_cache=MUcache, lang=MUlang)
-				dubleg="D" if "dublado" in cont else "L"
-				AddDir2("["+dubleg+"] "+mmm[-1]["TVShowTitle"].encode('utf-8'), id2, 501, iconimage, iconimage, info="", isFolder=True, background=background, metah=mmm[-1])
+				dubleg="[COLOR yellow][D][/COLOR]" if "dublado" in cont else "[COLOR blue][L][/COLOR]"
+				AddDir2(dubleg+" "+mmm[-1]["TVShowTitle"].encode('utf-8'), id2, 501, iconimage, iconimage, info="", isFolder=True, background=background, metah=mmm[-1])
 			except:
 				pass
 	except:
@@ -194,17 +194,27 @@ def animeepisvis(): #502
 			E = E + 1
 	except:
 		pass
-def playanimevis(play=False): #503
+def playanimevisauto(): #
 	try:
 		link = common.OpenURL(url)
 		mp4 = re.compile('[^"|\']+\.mp4[^"|\'|\n]*').findall(link)
 		qual = re.compile('\/(.{3,4}p)\/').findall( str(mp4) )
-		if XBMCPlayer().isPlaying() or play==True or len(qual)==1:
-			d = 0
-		else:
-			d = xbmcgui.Dialog().select("Escolha a qualidade:", qual)
+		PlayUrl("", mp4[0] + "|referer=http://animesvision.biz/&User-Agent=Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100110 Firefox/11.0", iconimage) 
+	except:
+		NF("Erro")
+		sys.exit()
+def playanimevis(): #503
+	try:
+		qual = ["1080p (1)", "1080p (2)", "720p (1)", "720p (2)", "480p (1)", "480p (2)"]
+		d = xbmcgui.Dialog().select("Escolha a qualidade:", qual)
+		url2 = url
+		if "(2)" in qual[d]:
+			url2 = re.sub('download$', "", url )
+		qual[d] = re.sub(' \(.\)', "", qual[d] )
+		link = common.OpenURL(url2)
+		mp4 = re.compile('[^"|\']+\.mp4[^"|\'|\n]*').findall(link)
 		if d > -1 :
-			mp4_ = mp4[d]
+			mp4_ = re.sub('\/.{3,4}p\/', "/"+qual[d]+"/", mp4[0] )
 		else:
 			sys.exit()
 		PlayUrl("", mp4_ + "|referer=http://animesvision.biz/&User-Agent=Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100110 Firefox/11.0", iconimage) 
