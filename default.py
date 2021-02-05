@@ -205,19 +205,17 @@ def playanimevisauto(): #
 		sys.exit()
 def playanimevis(): #503
 	try:
-		qual = ["1080p (1)", "1080p (2)", "720p (1)", "720p (2)", "480p (1)", "480p (2)"]
+		link = common.OpenURL(url)
+		vid = re.compile('[^"|\']+\.mp4[^"|\'|\n]*').findall(link)
+		url2 = re.sub('download$', "", url )
+		link2 = common.OpenURL(url2)
+		vid2 = re.compile('[^"|\']+\.mp4[^"|\'|\n]*').findall(link2)
+		if '/1080p/' in vid[0]:
+			vid2.append(re.sub('\/.{3,4}p\/', "/1080p/", vid2[0] ))
+		vid3 = vid + vid2
+		qual = re.compile('\/(.{3,4}p)\/').findall( str(vid3) )
 		d = xbmcgui.Dialog().select("Escolha a qualidade:", qual)
-		url2 = url
-		if "(2)" in qual[d]:
-			url2 = re.sub('download$', "", url )
-		qual[d] = re.sub(' \(.\)', "", qual[d] )
-		link = common.OpenURL(url2)
-		mp4 = re.compile('[^"|\']+\.mp4[^"|\'|\n]*').findall(link)
-		if d > -1 :
-			mp4_ = re.sub('\/.{3,4}p\/', "/"+qual[d]+"/", mp4[0] )
-		else:
-			sys.exit()
-		PlayUrl("", mp4_ + "|referer=http://animesvision.biz/&User-Agent=Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100110 Firefox/11.0", iconimage) 
+		PlayUrl("", vid3[d] + "|referer=http://animesvision.biz/&User-Agent=Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100110 Firefox/11.0", iconimage) 
 	except:
 		NF("Erro")
 		sys.exit()
@@ -1527,6 +1525,7 @@ def Update(): #200
 			file.close()
 	except:
 		pass
+	NF("Atualizando...")
 	xbmc.sleep(2000)
 	
 def ST(x="", o="w"):
