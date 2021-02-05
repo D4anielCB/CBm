@@ -124,7 +124,7 @@ def playanimenextvis(): #504
 			E = E + 1
 	except:
 		sys.exit()
-	NF("Temporada Completa")
+	NF("Todos episódios assistidos")
 	sys.exit()
 def listanimevis(): #500
 	try:
