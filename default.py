@@ -175,7 +175,7 @@ def listseavis(): #501
 				plus = "+" if "i=" in url2 else ""
 				AddDir2(dubleg+"["+season+"]"+plus+" "+metasea["TVShowTitle"].encode('utf-8'), url2, 504, "", "", info="", isFolder=False, IsPlayable=True, background=season, metah=metasea)
 				if "dublado" in url2:
-					AddDir2("[COLOR blue][L][/COLOR]["+season+"]"+plus+" "+metasea["TVShowTitle"].encode('utf-8'), url2, 504, "", "", info="", isFolder=False, IsPlayable=True, background=season, metah=metasea)
+					AddDir2("[COLOR blue][L][/COLOR]["+season+"]"+plus+" "+metasea["TVShowTitle"].encode('utf-8'), url2.replace("-dublado",""), 504, "", "", info="", isFolder=False, IsPlayable=True, background=season, metah=metasea)
 			except:
 				pass
 def animeepisvis(): #502
