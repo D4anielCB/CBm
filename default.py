@@ -112,7 +112,7 @@ def updateanime(): #509
 		url2 = common.OpenURL("https://cbplay.000webhostapp.com/cr/?id="+id)
 		NF("Atualizando...")
 		xbmc.sleep(3000)
-		Biblioteca()
+		xbmc.executebuiltin('XBMC.UpdateLibrary(video)')
 	except:
 		NF('deu ruim')
 def playanimenextvis(): #504
