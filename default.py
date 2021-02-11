@@ -91,14 +91,30 @@ def Categories(): #70
 		AddDir("[COLOR white][B]["+cTxt2+"][/B][/COLOR]" , "", 52, "", "https://ckneiferinstructional.files.wordpress.com/2010/12/tv-shows-completed1.jpg", info=info2)
 	if cTxt3 and cFonte3:
 		AddDir("[COLOR white][B]["+cTxt3+"][/B][/COLOR]" , "", 53, "", "https://ckneiferinstructional.files.wordpress.com/2010/12/tv-shows-completed1.jpg", info=info2)
-	AddDir("[COLOR white][B][Animes][/B][/COLOR]", "" ,500 , "", "https://ckneiferinstructional.files.wordpress.com/2010/12/tv-shows-completed1.jpg")
+	AddDir("[COLOR white][B][Animes][/B][/COLOR]", "" ,500 , "https://walter.trakt.tv/images/shows/000/001/420/fanarts/full/cd3e5bea6c.jpg.webp", "https://walter.trakt.tv/images/shows/000/001/420/fanarts/full/cd3e5bea6c.jpg.webp")
 	AddDir("[COLOR orange][B][Clean Cache][/B][/COLOR]", "" ,666 , "https://lh5.ggpht.com/gv992ET6R_InCoMXXwIbdRLJczqOHFfLxIeY-bN2nFq0r8MDe-y-cF2aWq6Qy9P_K-4=w300", "https://lh5.ggpht.com/gv992ET6R_InCoMXXwIbdRLJczqOHFfLxIeY-bN2nFq0r8MDe-y-cF2aWq6Qy9P_K-4=w300", isFolder=False)
 	if len(DirM) > 7:
 		AddDir("[COLOR green][B][Filmes Fav][/B][/COLOR]", "" ,352 , "", "https://ckneiferinstructional.files.wordpress.com/2010/12/tv-shows-completed1.jpg")
 		AddDir("[COLOR blue][B][Filmes][/B][/COLOR]", "" ,353 , "", "https://ckneiferinstructional.files.wordpress.com/2010/12/tv-shows-completed1.jpg")
 	AddDir("[COLOR orange][B][Atualizar][/B][/COLOR]" , "", 200, "https://accelerator-origin.kkomando.com/wp-content/uploads/2015/04/update2-970x546.jpg", "https://accelerator-origin.kkomando.com/wp-content/uploads/2015/04/update2-970x546.jpg", isFolder=False)
 	AddDir("[COLOR maroon][B][Atualizar Biblioteca][/B][/COLOR]" , "", 101, "https://accelerator-origin.kkomando.com/wp-content/uploads/2015/04/update2-970x546.jpg", "https://accelerator-origin.kkomando.com/wp-content/uploads/2015/04/update2-970x546.jpg", isFolder=False)
+	if Ctrakt:
+		AddDir("[COLOR orange][B][Atualizar Animes][/B][/COLOR]" , "", 509, "https://accelerator-origin.kkomando.com/wp-content/uploads/2015/04/update2-970x546.jpg", "https://accelerator-origin.kkomando.com/wp-content/uploads/2015/04/update2-970x546.jpg", isFolder=False)
 # --------------  Animes
+def updateanime(): #509
+	try:
+		import requests
+		url = 'http://api.crunchyroll.com/start_session.1.json'
+		myobj = {'device_id': '35yuv973-KODI-nh6i-69l8-81m0p580id2j', 'device_type': 'com.crunchyroll.windows.desktop', 'access_token': 'LNDJgOit5yaRIWN'}
+		x = requests.post(url, data = myobj)
+		j=json.loads(x.text)
+		id = j['data']['session_id']
+		url2 = common.OpenURL("https://cbplay.000webhostapp.com/cr/?id="+id)
+		NF("Atualizando...")
+		xbmc.sleep(3000)
+		Biblioteca()
+	except:
+		NF('deu ruim')
 def playanimenextvis(): #504
 	try:
 		trak = traktS()
@@ -1813,5 +1829,7 @@ elif mode == 503: #playanime
 	playanimevis()
 elif mode == 504: 
 	playanimenextvis()
+elif mode == 509: 
+	updateanime()
 xbmcplugin.endOfDirectory(int(sys.argv[1]))
 #checkintegritycbmeta
