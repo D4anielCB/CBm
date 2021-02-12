@@ -639,7 +639,7 @@ def PlayS(): #62
 					if "ALTO" in url4:
 						d=url4.replace("';","")
 			i+=1
-		if d and len(listaf) <= 2:
+		if d and len(listaf) <= 2 and "BAIXO" in str(listal):
 			d = re.sub('https', 'http', d)
 			PlayUrl(name, d+"|Referer=http://cdn.netcine.info&Connection=Keep-Alive&Accept-Language=en&User-Agent=Mozilla%2F5.0+%28compatible%3B+MSIE+10.6%3B+Windows+NT+6.1%3B+Trident%2F6.0%29", iconimage, info)
 		else:
