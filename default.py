@@ -92,6 +92,7 @@ def Categories(): #70
 	if cTxt3 and cFonte3:
 		AddDir("[COLOR white][B]["+cTxt3+"][/B][/COLOR]" , "", 53, "", "https://ckneiferinstructional.files.wordpress.com/2010/12/tv-shows-completed1.jpg", info=info2)
 	AddDir("[COLOR white][B][Animes][/B][/COLOR]", "" ,500 , "https://walter.trakt.tv/images/shows/000/001/420/fanarts/full/cd3e5bea6c.jpg.webp", "https://walter.trakt.tv/images/shows/000/001/420/fanarts/full/cd3e5bea6c.jpg.webp")
+	AddDir("[COLOR white][B][Desenhos][/B][/COLOR]", "" ,505 , "https://walter.trakt.tv/images/shows/000/000/455/fanarts/full/e69f8ca9ad.jpg.webp", "https://walter.trakt.tv/images/shows/000/000/455/fanarts/full/e69f8ca9ad.jpg.webp")
 	AddDir("[COLOR orange][B][Clean Cache][/B][/COLOR]", "" ,666 , "https://lh5.ggpht.com/gv992ET6R_InCoMXXwIbdRLJczqOHFfLxIeY-bN2nFq0r8MDe-y-cF2aWq6Qy9P_K-4=w300", "https://lh5.ggpht.com/gv992ET6R_InCoMXXwIbdRLJczqOHFfLxIeY-bN2nFq0r8MDe-y-cF2aWq6Qy9P_K-4=w300", isFolder=False)
 	if len(DirM) > 7:
 		AddDir("[COLOR green][B][Filmes Fav][/B][/COLOR]", "" ,352 , "", "https://ckneiferinstructional.files.wordpress.com/2010/12/tv-shows-completed1.jpg")
@@ -142,9 +143,9 @@ def playanimenextvis(): #504
 		sys.exit()
 	NF("Todos episódios assistidos")
 	sys.exit()
-def listanimevis(): #500
+def listanimevis(pastebin): #500
 	try:
-		link = common.OpenURL("https://pastebin.com/raw/nrC8aGLT").replace("\n","+")
+		link = common.OpenURL("https://pastebin.com/raw/"+pastebin).replace("\n","+")
 		lista = re.compile("\*?(.+?);(\d+)?;\+(.+?)\*").findall(link)
 		lista = sorted(lista, key=lambda lista: lista[0])
 		for name2,id2,cont in lista:
@@ -152,14 +153,14 @@ def listanimevis(): #500
 				mg = MetadataUtils()
 				mmm = mg.get_tvshow_details(title=name2,tmdb_id=id2, ignore_cache=MUcache, lang=MUlang)
 				dubleg="[COLOR yellow][D][/COLOR]" if "dublado" in cont else "[COLOR blue][L][/COLOR]"
-				AddDir2(dubleg+" "+mmm[-1]["TVShowTitle"].encode('utf-8'), id2, 501, iconimage, iconimage, info="", isFolder=True, background=background, metah=mmm[-1])
+				AddDir2(dubleg+" "+mmm[-1]["TVShowTitle"].encode('utf-8'), id2, 501, iconimage, iconimage, info=pastebin, isFolder=True, background=background, metah=mmm[-1])
 			except:
 				pass
 	except:
 		pass
 	return
 def listseavis(): #501
-	link = common.OpenURL("https://pastebin.com/raw/nrC8aGLT").replace("\n","+")
+	link = common.OpenURL("https://pastebin.com/raw/"+info).replace("\n","+")
 	lista = re.compile("\*?(.+?);(\d+)?;\+(.+?)\*").findall(link)
 	lista = sorted(lista, key=lambda lista: lista[0])
 	for name2,id2,cont2 in lista:
@@ -175,7 +176,7 @@ def listseavis(): #501
 			dubleg="[COLOR yellow][D][/COLOR]" if "dublado" in url2 else "[COLOR blue][L][/COLOR]"
 			plus = "+" if "i=" in url2 else ""
 			AddDir2(dubleg+"["+season+"]"+plus+" "+metasea["TVShowTitle"].encode('utf-8'), url2, 502, iconimage, iconimage, info="", isFolder=True, background=season, metah=metasea)
-			if "dublado" in url2:
+			if "dublado" in url2 and not "noleg=1" in url2:
 				AddDir2("[COLOR blue][L][/COLOR]["+season+"]"+plus+" "+metasea["TVShowTitle"].encode('utf-8'), url2.replace("-dublado",""), 502, iconimage, iconimage, info="", isFolder=True, background=season, metah=metasea)
 		except:
 			pass
@@ -190,7 +191,7 @@ def listseavis(): #501
 				dubleg="[COLOR yellow][D][/COLOR]" if "dublado" in url2 else "[COLOR blue][L][/COLOR]"
 				plus = "+" if "i=" in url2 else ""
 				AddDir2(dubleg+"["+season+"]"+plus+" "+metasea["TVShowTitle"].encode('utf-8'), url2, 504, "", "", info="", isFolder=False, IsPlayable=True, background=season, metah=metasea)
-				if "dublado" in url2:
+				if "dublado" in url2 and not "noleg=1" in url2:
 					AddDir2("[COLOR blue][L][/COLOR]["+season+"]"+plus+" "+metasea["TVShowTitle"].encode('utf-8'), url2.replace("-dublado",""), 504, "", "", info="", isFolder=False, IsPlayable=True, background=season, metah=metasea)
 			except:
 				pass
@@ -1817,7 +1818,10 @@ elif mode == 409:
 	LatestSSF()
 	setViewS2()
 elif mode == 500: #anime
-	listanimevis()
+	listanimevis("nrC8aGLT")
+	setViewS()
+elif mode == 505: #anime
+	listanimevis("4saXzqHu")
 	setViewS()
 elif mode == 501: #anime
 	listseavis()
