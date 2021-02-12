@@ -507,7 +507,6 @@ def Series(x): #60
 			link = re.sub('(http.+)\s(http.+)', r"\1;\2", link )
 			lista = re.compile("(.+);(.*)\s(.+)").findall(link)
 			lista = sorted(lista, key=lambda lista: lista[0])
-			#ST(link)
 			for name2,id2,url2 in lista:
 				try:
 					mg = MetadataUtils()
@@ -1370,9 +1369,9 @@ def AddDir2(name, url, mode, iconimage='', logos='', index="", move=0, isFolder=
 			if "cast" in metah:
 				liz.setCast(metah['cast'])
 			metah.pop('cast', 1)
-			metah['tagline'] = re.sub('\[(.+)\]', r'\1', str(metah['genre']) )
-			metah['tagline'] = re.sub("u\'(.+?)\'", r'\1', metah['tagline'] ) 
-			#ST( )
+			metah['tagline'] = ""
+			for i in metah['genre']:
+				metah['tagline'] = i.encode("utf-8") if metah['tagline'] == "" else metah['tagline'] + ", " + i.encode("utf-8")
 			metah['plot'] = metah['plot2'] if metah['plot2'] else metah['plot']
 			liz.setInfo( type="Video", infoLabels= metah )
 	else:
