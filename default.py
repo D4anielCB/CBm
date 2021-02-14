@@ -91,9 +91,9 @@ def Categories(): #70
 		AddDir("[COLOR white][B]["+cTxt2+"][/B][/COLOR]" , "", 52, "", "https://ckneiferinstructional.files.wordpress.com/2010/12/tv-shows-completed1.jpg", info=info2)
 	if cTxt3 and cFonte3:
 		AddDir("[COLOR white][B]["+cTxt3+"][/B][/COLOR]" , "", 53, "", "https://ckneiferinstructional.files.wordpress.com/2010/12/tv-shows-completed1.jpg", info=info2)
-	AddDir("[COLOR white][B][Animes][/B][/COLOR]", "" ,500 , "https://walter.trakt.tv/images/shows/000/001/420/fanarts/full/cd3e5bea6c.jpg.webp", "https://walter.trakt.tv/images/shows/000/001/420/fanarts/full/cd3e5bea6c.jpg.webp")
-	AddDir("[COLOR white][B][Animes 2][/B][/COLOR]", "" ,506 , "https://walter.trakt.tv/images/shows/000/000/455/fanarts/full/e69f8ca9ad.jpg.webp", "https://walter.trakt.tv/images/shows/000/000/455/fanarts/full/e69f8ca9ad.jpg.webp")
-	AddDir("[COLOR white][B][Desenhos][/B][/COLOR]", "" ,505 , "https://walter.trakt.tv/images/shows/000/000/455/fanarts/full/e69f8ca9ad.jpg.webp", "https://walter.trakt.tv/images/shows/000/000/455/fanarts/full/e69f8ca9ad.jpg.webp")
+	AddDir("[COLOR blue][B][Animes][/B][/COLOR]", "" ,500 , "https://walter.trakt.tv/images/shows/000/001/420/fanarts/full/cd3e5bea6c.jpg.webp", "https://walter.trakt.tv/images/shows/000/001/420/fanarts/full/cd3e5bea6c.jpg.webp")
+	AddDir("[COLOR blue][B][Animes 2][/B][/COLOR]", "" ,506 , "https://walter.trakt.tv/images/shows/000/131/598/fanarts/full/888c8578bc.jpg.webp", "https://walter.trakt.tv/images/shows/000/131/598/fanarts/full/888c8578bc.jpg.webp")
+	AddDir("[COLOR blue][B][Desenhos][/B][/COLOR]", "" ,505 , "https://walter.trakt.tv/images/shows/000/000/455/fanarts/full/e69f8ca9ad.jpg.webp", "https://walter.trakt.tv/images/shows/000/000/455/fanarts/full/e69f8ca9ad.jpg.webp")
 	AddDir("[COLOR orange][B][Clean Cache][/B][/COLOR]", "" ,666 , "https://lh5.ggpht.com/gv992ET6R_InCoMXXwIbdRLJczqOHFfLxIeY-bN2nFq0r8MDe-y-cF2aWq6Qy9P_K-4=w300", "https://lh5.ggpht.com/gv992ET6R_InCoMXXwIbdRLJczqOHFfLxIeY-bN2nFq0r8MDe-y-cF2aWq6Qy9P_K-4=w300", isFolder=False)
 	if len(DirM) > 7:
 		AddDir("[COLOR green][B][Filmes Fav][/B][/COLOR]", "" ,352 , "", "https://ckneiferinstructional.files.wordpress.com/2010/12/tv-shows-completed1.jpg")
@@ -149,12 +149,20 @@ def listanimevis(pastebin): #500
 		link = common.OpenURL("https://pastebin.com/raw/"+pastebin).replace("\n","+")
 		lista = re.compile("\*?(.+?);(\d+)?;\+(.+?)\*").findall(link)
 		lista = sorted(lista, key=lambda lista: lista[0])
+		animes=[]
 		for name2,id2,cont in lista:
 			try:
 				mg = MetadataUtils()
 				mmm = mg.get_tvshow_details(title=name2,tmdb_id=id2, ignore_cache=MUcache, lang=MUlang)
 				dubleg="[COLOR yellow][D][/COLOR]" if "dublado" in cont else "[COLOR blue][L][/COLOR]"
-				AddDir2(dubleg+" "+name2, name2, 501, iconimage, iconimage, info=pastebin, isFolder=True, background=background, metah=mmm[-1])
+				animes.append([mmm[-1]['TVShowTitle'],name2,mmm[-1],dubleg])
+				#AddDir2(dubleg+" "+name2, name2, 501, iconimage, iconimage, info=pastebin, isFolder=True, background=background, metah=mmm[-1])
+			except:
+				pass
+		animes = sorted(animes, key=lambda animes: animes[0])
+		for title,name2,met,dubleg in animes:
+			try:
+				AddDir2(dubleg+" "+title, name2, 501, iconimage, iconimage, info=pastebin, isFolder=True, background=background, metah=met)
 			except:
 				pass
 	except:
