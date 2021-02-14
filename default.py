@@ -146,7 +146,7 @@ def playanimenextvis(): #504
 	sys.exit()
 def listanimevis(pastebin): #500
 	try:
-		link = common.OpenURL("https://pastebin.com/raw/"+pastebin).replace("\n","+")
+		link = common.OpenURL("https://pastebin.com/raw/"+pastebin).replace("\n","+")+"*"
 		lista = re.compile("\*?(.+?);(\d+)?;\+(.+?)\*").findall(link)
 		lista = sorted(lista, key=lambda lista: lista[0])
 		animes=[]
@@ -169,7 +169,7 @@ def listanimevis(pastebin): #500
 		pass
 	return
 def listseavis(): #501
-	link = common.OpenURL("https://pastebin.com/raw/"+info).replace("\n","+")
+	link = common.OpenURL("https://pastebin.com/raw/"+info).replace("\n","+")+"+*"
 	lista = re.compile("\*?(.+?);(\d+)?;\+(.+?)\*").findall(link)
 	lista = sorted(lista, key=lambda lista: lista[0])
 	cont1 = ""
