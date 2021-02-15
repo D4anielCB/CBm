@@ -1247,20 +1247,20 @@ def PlayUrl(name, url, iconimage=None, info='', sub=''):
 			mg = MetadataUtils()
 			eInfo_ = mg.get_episode_details(metah2['tmdb_id'], SEAS(background), EPI(episode))
 			eInfo = mergedicts(metah2,eInfo_)
-			eInfo["Title"]= eInfo["TVShowTitle"]
+			eInfo["Title"]= eInfo['EpisodeTitle']
 			S=str(eInfo['season'])
 			E=str(eInfo['episode'])
 			listitem.setArt({"poster": eInfo['cover_url'], "banner": eInfo['cover_url'], "fanart": eInfo['backdrop_url'] })
 			eInfo.pop('cast', 1)
 			listitem.setInfo( type="Video", infoLabels= eInfo )
-			listitem.setInfo( type="Video", infoLabels= {'genre': '[COLOR blue]S'+str(eInfo['season'])+'E'+str(eInfo['episode'])+'[/COLOR]: '+eInfo['EpisodeTitle']} )
+			listitem.setInfo( type="Video", infoLabels= {'genre': '[COLOR primary_background]S'+str(eInfo['season'])+'E'+str(eInfo['episode'])+'[/COLOR]: '+eInfo["TVShowTitle"]} )
 		except:
 			try:
 				metah2 = eval(metah)
 				metah2['Title'] = metah2['TVShowTitle']
 				metah2['season'] = int(background)
 				metah2['episode'] = int(episode)
-				metah2['genre'] = '[COLOR blue]S'+str( SEAS(background) )+'E'+str( EPI(episode) )+'[/COLOR]'
+				metah2['genre'] = '[COLOR primary_background]S'+str( SEAS(background) )+'E'+str( EPI(episode) )+'[/COLOR]'
 				listitem.setInfo( type="Video", infoLabels= metah2 )
 			except:
 				pass
@@ -1553,7 +1553,7 @@ def Update(): #200
 			file.close()
 	except:
 		pass
-	NF("Atualizando...")
+	NF("Atualizando...",1000)
 	xbmc.sleep(2000)
 	
 def ST(x="", o="w"):
