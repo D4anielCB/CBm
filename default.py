@@ -213,14 +213,19 @@ def animeepisvis(): #502
 		link = common.OpenURL(url)
 		lista = re.compile("[^']+\/download").findall(link)
 		E = 1
+		S = 1
 		i = re.compile('i\=(\d+)').findall(url)
 		if i:
 			E = int(i[0])
 		meta = eval(metah)
 		for l in lista:
 			pc = 1 if meta['imdb_id']+str(meta['season_number'])+str(int(E)) in trak else None
-			AddDir2("" ,l, 503, "", "",  isFolder=False, IsPlayable=True, background=str(meta['season_number']), metah=meta, episode=str(E), DL="", playcount=pc)
-			E = E + 1
+			if re.compile('animes.+\-\d+').findall(l):
+				AddDir2("" ,l, 503, "", "",  isFolder=False, IsPlayable=True, background=str(meta['season_number']), metah=meta, episode=str(E), playcount=pc)
+				E+= 1
+			else:
+				AddDir2("" ,l, 503, "", "",  isFolder=False, IsPlayable=True, background="0", metah=meta, episode=str(S), playcount=pc)
+				S+= 1
 	except:
 		pass
 def playanimevisauto(): #
@@ -1252,6 +1257,8 @@ def PlayUrl(name, url, iconimage=None, info='', sub=''):
 			E=str(eInfo['episode'])
 			listitem.setArt({"poster": eInfo['cover_url'], "banner": eInfo['cover_url'], "fanart": eInfo['backdrop_url'] })
 			eInfo.pop('cast', 1)
+			#eInfo['plot'] += "\nAired: " +Data(str(eInfo['premiered']))
+			eInfo['plot'] += u"\nExibição: " +Data(str(eInfo['premiered'])) if MUlang == "pt-BR" else "\nAired: " +Data(str(eInfo['premiered']))
 			listitem.setInfo( type="Video", infoLabels= eInfo )
 			listitem.setInfo( type="Video", infoLabels= {'genre': '[COLOR primary_background]S'+str(eInfo['season'])+'E'+str(eInfo['episode'])+'[/COLOR]: '+eInfo["TVShowTitle"]} )
 		except:
@@ -1286,8 +1293,8 @@ def PlayUrl(name, url, iconimage=None, info='', sub=''):
 			xbmc.sleep(500)
 			break'''
 def Data(x):
-	x = eInfo = re.sub('\d\d(\d+)\-(\d+)\-(\d+)', r'\3/\2/\1', x )
-	return "[COLOR yellow]("+x+")[/COLOR]"
+	x = re.sub('\d\d(\d+)\-(\d+)\-(\d+)', r'\3/\2/\1', x )
+	return "[COLOR white]("+x+")[/COLOR]"
 def EPI(x):
 	x = re.sub('[0]+(\d+)', r'\1', x )
 	return str(x)
