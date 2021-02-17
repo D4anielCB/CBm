@@ -1260,14 +1260,14 @@ def PlayUrl(name, url, iconimage=None, info='', sub=''):
 			#eInfo['plot'] += "\nAired: " +Data(str(eInfo['premiered']))
 			eInfo['plot'] += u"\nExibição: " +Data(str(eInfo['premiered'])) if MUlang == "pt-BR" else "\nAired: " +Data(str(eInfo['premiered']))
 			listitem.setInfo( type="Video", infoLabels= eInfo )
-			listitem.setInfo( type="Video", infoLabels= {'genre': '[COLOR primary_background]S'+str(eInfo['season'])+'E'+str(eInfo['episode'])+'[/COLOR]: '+eInfo["TVShowTitle"]} )
+			listitem.setInfo( type="Video", infoLabels= {'genre': '[COLOR button_focus]S'+str(eInfo['season'])+'E'+str(eInfo['episode'])+'[/COLOR]: '+eInfo["TVShowTitle"]} )
 		except:
 			try:
 				metah2 = eval(metah)
 				metah2['Title'] = metah2['TVShowTitle']
 				metah2['season'] = int(background)
 				metah2['episode'] = int(episode)
-				metah2['genre'] = '[COLOR primary_background]S'+str( SEAS(background) )+'E'+str( EPI(episode) )+'[/COLOR]'
+				metah2['genre'] = '[COLOR button_focus]S'+str( SEAS(background) )+'E'+str( EPI(episode) )+'[/COLOR]'
 				listitem.setInfo( type="Video", infoLabels= metah2 )
 			except:
 				pass
