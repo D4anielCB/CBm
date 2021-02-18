@@ -1277,7 +1277,6 @@ def PlayUrl(name, url, iconimage=None, info='', sub=''):
 		except:
 			try:
 				metah2 = eval(metah)
-				ST(metah2)
 				metah2['Title'] = metah2['TVShowTitle']
 				metah2['season'] = int(background)
 				metah2['episode'] = int(episode)
