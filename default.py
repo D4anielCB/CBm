@@ -162,7 +162,7 @@ def listanimevis(pastebin): #500
 		animes = sorted(animes, key=lambda animes: animes[0])
 		for title,name2,met,dubleg in animes:
 			try:
-				AddDir2(dubleg+" "+title, name2, 501, iconimage, iconimage, info=pastebin, isFolder=True, background=background, metah=met)
+				AddDir2(dubleg+" "+title.encode('utf-8'), name2, 501, iconimage, iconimage, info=pastebin, isFolder=True, background=background, metah=met)
 			except:
 				pass
 	except:
