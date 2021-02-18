@@ -94,6 +94,7 @@ def Categories(): #70
 	AddDir("[COLOR blue][B][Animes][/B][/COLOR]", "" ,500 , "https://walter.trakt.tv/images/shows/000/001/420/fanarts/full/cd3e5bea6c.jpg.webp", "https://walter.trakt.tv/images/shows/000/001/420/fanarts/full/cd3e5bea6c.jpg.webp")
 	AddDir("[COLOR blue][B][Animes 2][/B][/COLOR]", "" ,506 , "https://walter.trakt.tv/images/shows/000/131/598/fanarts/full/888c8578bc.jpg.webp", "https://walter.trakt.tv/images/shows/000/131/598/fanarts/full/888c8578bc.jpg.webp")
 	AddDir("[COLOR blue][B][Desenhos][/B][/COLOR]", "" ,505 , "https://walter.trakt.tv/images/shows/000/000/455/fanarts/full/e69f8ca9ad.jpg.webp", "https://walter.trakt.tv/images/shows/000/000/455/fanarts/full/e69f8ca9ad.jpg.webp")
+	AddDir("[COLOR blue][B][Filmes Animes][/B][/COLOR]", "" ,510 , "https://walter.trakt.tv/images/shows/000/000/455/fanarts/full/e69f8ca9ad.jpg.webp", "https://walter.trakt.tv/images/shows/000/000/455/fanarts/full/e69f8ca9ad.jpg.webp")
 	AddDir("[COLOR orange][B][Clean Cache][/B][/COLOR]", "" ,666 , "https://lh5.ggpht.com/gv992ET6R_InCoMXXwIbdRLJczqOHFfLxIeY-bN2nFq0r8MDe-y-cF2aWq6Qy9P_K-4=w300", "https://lh5.ggpht.com/gv992ET6R_InCoMXXwIbdRLJczqOHFfLxIeY-bN2nFq0r8MDe-y-cF2aWq6Qy9P_K-4=w300", isFolder=False)
 	if len(DirM) > 7:
 		AddDir("[COLOR green][B][Filmes Fav][/B][/COLOR]", "" ,352 , "", "https://ckneiferinstructional.files.wordpress.com/2010/12/tv-shows-completed1.jpg")
@@ -103,6 +104,16 @@ def Categories(): #70
 	if Ctrakt:
 		AddDir("[COLOR orange][B][Atualizar Animes][/B][/COLOR]" , "", 509, "https://accelerator-origin.kkomando.com/wp-content/uploads/2015/04/update2-970x546.jpg", "https://accelerator-origin.kkomando.com/wp-content/uploads/2015/04/update2-970x546.jpg", isFolder=False)
 # --------------  Animes
+def animesfilme(): #510
+	link = common.OpenURL("https://pastebin.com/raw/D22eAtqS")
+	lista = re.compile("(.+);(.*)\s(.+)").findall(link)
+	mg = metahandlers.MetaData()
+	trak = traktM()
+	for name2,id2,url2 in lista:
+		mm = mg.get_meta('movie',name2.encode("utf-8"), tmdb_id=id2)
+		pc = 1 if mm['imdb_id'] in trak else None
+		#ST(mm)
+		AddDir(name2.encode("utf-8") + " (" + str(mm['year'])+")", url2, 503, "", mm['tmdb_id'], isFolder=False, IsPlayable=True, background="", metah=mm, DL="", playcount=pc)
 def updateanime(): #509
 	try:
 		import requests
@@ -1257,18 +1268,22 @@ def PlayUrl(name, url, iconimage=None, info='', sub=''):
 			E=str(eInfo['episode'])
 			listitem.setArt({"poster": eInfo['cover_url'], "banner": eInfo['cover_url'], "fanart": eInfo['backdrop_url'] })
 			eInfo.pop('cast', 1)
+			#eInfo.pop('tmdb_id', 1)
 			#eInfo['plot'] += "\nAired: " +Data(str(eInfo['premiered']))
 			eInfo['plot'] += u"\nExibição: " +Data(str(eInfo['premiered'])) if MUlang == "pt-BR" else "\nAired: " +Data(str(eInfo['premiered']))
 			listitem.setInfo( type="Video", infoLabels= eInfo )
+			ST(eInfo)
 			listitem.setInfo( type="Video", infoLabels= {'genre': '[COLOR button_focus]S'+str(eInfo['season'])+'E'+str(eInfo['episode'])+'[/COLOR]: '+eInfo["TVShowTitle"]} )
 		except:
 			try:
 				metah2 = eval(metah)
+				ST(metah2)
 				metah2['Title'] = metah2['TVShowTitle']
 				metah2['season'] = int(background)
 				metah2['episode'] = int(episode)
 				metah2['genre'] = '[COLOR button_focus]S'+str( SEAS(background) )+'E'+str( EPI(episode) )+'[/COLOR]'
 				listitem.setInfo( type="Video", infoLabels= metah2 )
+				#listitem.setInfo( type="Video", infoLabels= {'imdb_id': 'tt0078802'} )
 			except:
 				pass
 	else:
@@ -1336,7 +1351,7 @@ def AddDir(name, url, mode, iconimage='', logos='', index="", move=0, isFolder=T
 			else:
 				metah.pop('playcount', 1)
 			#metah['cast']=['a','b']
-			liz=xbmcgui.ListItem(DL +" "+name, iconImage=metah['cover_url'], thumbnailImage=metah['cover_url'])
+			liz=xbmcgui.ListItem(DL +""+name, iconImage=metah['cover_url'], thumbnailImage=metah['cover_url'])
 			liz.setArt({"poster": metah['cover_url'], "banner": metah['cover_url'], "fanart": metah['backdrop_url'] })
 			liz.setInfo( type="Video", infoLabels= metah )
 	else:
@@ -1852,9 +1867,12 @@ elif mode == 502: #anime
 	setViewS2()
 elif mode == 503: #playanime
 	playanimevis()
-elif mode == 504: 
+elif mode == 504:
 	playanimenextvis()
-elif mode == 509: 
+elif mode == 509:
 	updateanime()
+elif mode == 510:
+	animesfilme()
+	setViewM2()
 xbmcplugin.endOfDirectory(int(sys.argv[1]))
 #checkintegritycbmeta
