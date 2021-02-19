@@ -94,7 +94,7 @@ def Categories(): #70
 	AddDir("[COLOR blue][B][Animes][/B][/COLOR]", "" ,500 , "https://walter.trakt.tv/images/shows/000/001/420/fanarts/full/cd3e5bea6c.jpg.webp", "https://walter.trakt.tv/images/shows/000/001/420/fanarts/full/cd3e5bea6c.jpg.webp")
 	AddDir("[COLOR blue][B][Animes 2][/B][/COLOR]", "" ,506 , "https://walter.trakt.tv/images/shows/000/131/598/fanarts/full/888c8578bc.jpg.webp", "https://walter.trakt.tv/images/shows/000/131/598/fanarts/full/888c8578bc.jpg.webp")
 	AddDir("[COLOR blue][B][Desenhos][/B][/COLOR]", "" ,505 , "https://walter.trakt.tv/images/shows/000/000/455/fanarts/full/e69f8ca9ad.jpg.webp", "https://walter.trakt.tv/images/shows/000/000/455/fanarts/full/e69f8ca9ad.jpg.webp")
-	AddDir("[COLOR blue][B][Filmes Animes][/B][/COLOR]", "" ,510 , "https://walter.trakt.tv/images/shows/000/000/455/fanarts/full/e69f8ca9ad.jpg.webp", "https://walter.trakt.tv/images/shows/000/000/455/fanarts/full/e69f8ca9ad.jpg.webp")
+	AddDir("[COLOR blue][B][Filmes Animes][/B][/COLOR]", "" ,510 , "https://walter.trakt.tv/images/movies/000/350/802/fanarts/full/9d5e75ff67.jpg.webp", "https://walter.trakt.tv/images/movies/000/350/802/fanarts/full/9d5e75ff67.jpg.webp")
 	AddDir("[COLOR orange][B][Clean Cache][/B][/COLOR]", "" ,666 , "https://lh5.ggpht.com/gv992ET6R_InCoMXXwIbdRLJczqOHFfLxIeY-bN2nFq0r8MDe-y-cF2aWq6Qy9P_K-4=w300", "https://lh5.ggpht.com/gv992ET6R_InCoMXXwIbdRLJczqOHFfLxIeY-bN2nFq0r8MDe-y-cF2aWq6Qy9P_K-4=w300", isFolder=False)
 	if len(DirM) > 7:
 		AddDir("[COLOR green][B][Filmes Fav][/B][/COLOR]", "" ,352 , "", "https://ckneiferinstructional.files.wordpress.com/2010/12/tv-shows-completed1.jpg")
@@ -959,9 +959,15 @@ def PlayUrl2(name, url, iconimage=None, info='', sub='', metah=''):
 	listitem = xbmcgui.ListItem(path=url)
 	#listitem = xbmcgui.ListItem(path="D:\S\Shows\Under Pressure (2017)\SOBPRSAOS02E02.mp4")
 	if metah:
+		ST(metah)
 		listitem.setProperty('StartPercent', RS)
 		listitem.setArt({"thumb": metah['cover_url'], "poster": metah['cover_url'], "banner": metah['cover_url'], "fanart": metah['backdrop_url'] })
 		listitem.setInfo(type="Video", infoLabels=metah)
+		try:
+			ids = json.dumps({u'tmdb': metah['tmdb_id']})
+			xbmcgui.Window(10000).setProperty('script.trakt.ids', ids)
+		except:
+			pass
 	else:
 		listitem.setInfo(type="Video", infoLabels={"mediatype": "video", "Title": name, "Plot": info })
 	if sub!='':
@@ -1272,7 +1278,7 @@ def PlayUrl(name, url, iconimage=None, info='', sub=''):
 			#eInfo['plot'] += "\nAired: " +Data(str(eInfo['premiered']))
 			eInfo['plot'] += u"\nExibição: " +Data(str(eInfo['premiered'])) if MUlang == "pt-BR" else "\nAired: " +Data(str(eInfo['premiered']))
 			listitem.setInfo( type="Video", infoLabels= eInfo )
-			ST(eInfo)
+			#ST(eInfo)
 			listitem.setInfo( type="Video", infoLabels= {'genre': '[COLOR button_focus]S'+str(eInfo['season'])+'E'+str(eInfo['episode'])+'[/COLOR]: '+eInfo["TVShowTitle"]} )
 		except:
 			try:
@@ -1285,6 +1291,11 @@ def PlayUrl(name, url, iconimage=None, info='', sub=''):
 				#listitem.setInfo( type="Video", infoLabels= {'imdb_id': 'tt0078802'} )
 			except:
 				pass
+		try:
+			ids = json.dumps({u'tmdb': metah2['tmdb_id']})
+			xbmcgui.Window(10000).setProperty('script.trakt.ids', ids)
+		except:
+			pass
 	else:
 		listitem.setInfo(type="Video", infoLabels={"mediatype": "video", "Title": name, "Plot": info })
 		if iconimage is not None:
