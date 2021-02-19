@@ -161,9 +161,9 @@ def listanimevis(pastebin): #500
 		lista = re.compile("\*?(.+?);(\d+)?;\+(.+?)\*").findall(link)
 		lista = sorted(lista, key=lambda lista: lista[0])
 		animes=[]
+		mg = MetadataUtils()
 		for name2,id2,cont in lista:
 			try:
-				mg = MetadataUtils()
 				mmm = mg.get_tvshow_details(title=name2,tmdb_id=id2, ignore_cache=MUcache, lang=MUlang)
 				dubleg="[COLOR yellow][D][/COLOR]" if "dublado" in cont else "[COLOR blue][L][/COLOR]"
 				animes.append([mmm[-1]['TVShowTitle'],name2,mmm[-1],dubleg])
@@ -188,36 +188,36 @@ def listseavis(): #501
 		if name2 == url:
 			cont1 = cont2
 	lista = re.compile("(\d+)?;?(.+?)\+").findall(cont1)
+	mg = MetadataUtils()
 	for season,url2 in lista:
 		try:
 			meta = eval(metah)
-			mg = MetadataUtils()
 			mmm = mg.get_tvshow_details(title="",tmdb_id=meta['tmdb_id'], ignore_cache=MUcache, lang=MUlang)
 			season = "1" if season == "" else season
 			metasea=mergedicts(meta,mmm[int(season)])
 			dubleg="[COLOR yellow][D][/COLOR]" if "dublado" in url2 else "[COLOR blue][L][/COLOR]"
 			plus = "+" if "i=" in url2 else ""
-			AddDir2(dubleg+"["+season+"]"+plus+" "+metasea["TVShowTitle"].encode('utf-8'), url2, 502, iconimage, iconimage, info="", isFolder=True, background=season, metah=metasea)
+			AddDir2(dubleg+"["+season+"]"+plus+" "+metasea["name"].encode('utf-8'), url2, 502, iconimage, iconimage, info="", isFolder=True, background=season, metah=metasea)
 			if "dublado" in url2 and not "noleg=1" in url2:
-				AddDir2("[COLOR blue][L][/COLOR]["+season+"]"+plus+" "+metasea["TVShowTitle"].encode('utf-8'), url2.replace("-dublado",""), 502, iconimage, iconimage, info="", isFolder=True, background=season, metah=metasea)
+				AddDir2("[COLOR blue][L][/COLOR]["+season+"]"+plus+" "+metasea["name"].encode('utf-8'), url2.replace("-dublado",""), 502, iconimage, iconimage, info="", isFolder=True, background=season, metah=metasea)
 		except:
 			pass
-	if Ctrakt != "":
-		AddDir("---------- Autoplay ----------" , "", 40, isFolder=False)
-		for season,url2 in lista:
-			try:
-				meta = eval(metah)
-				mg = MetadataUtils()
-				mmm = mg.get_tvshow_details(title="",tmdb_id=meta['tmdb_id'], ignore_cache=MUcache, lang=MUlang)
-				season = "1" if season == "" else season
-				metasea=mergedicts(meta,mmm[int(season)])
-				dubleg="[COLOR yellow][D][/COLOR]" if "dublado" in url2 else "[COLOR blue][L][/COLOR]"
-				plus = "+" if "i=" in url2 else ""
-				AddDir2(dubleg+"["+season+"]"+plus+" "+metasea["TVShowTitle"].encode('utf-8'), url2, 504, "", "", info="", isFolder=False, IsPlayable=True, background=season, metah=metasea)
-				if "dublado" in url2 and not "noleg=1" in url2:
-					AddDir2("[COLOR blue][L][/COLOR]["+season+"]"+plus+" "+metasea["TVShowTitle"].encode('utf-8'), url2.replace("-dublado",""), 504, "", "", info="", isFolder=False, IsPlayable=True, background=season, metah=metasea)
-			except:
-				pass
+	if Ctrakt == None:
+		return
+	AddDir("---------- Autoplay ----------" , "", 40, isFolder=False)
+	for season,url2 in lista:
+		try:
+			meta = eval(metah)
+			mmm = mg.get_tvshow_details(title="",tmdb_id=meta['tmdb_id'], ignore_cache=MUcache, lang=MUlang)
+			season = "1" if season == "" else season
+			metasea=mergedicts(meta,mmm[int(season)])
+			dubleg="[COLOR yellow][D][/COLOR]" if "dublado" in url2 else "[COLOR blue][L][/COLOR]"
+			plus = "+" if "i=" in url2 else ""
+			AddDir2(dubleg+"["+season+"]"+plus+" "+metasea["TVShowTitle"].encode('utf-8'), url2, 504, "", "", info="", isFolder=False, IsPlayable=True, background=season, metah=metasea)
+			if "dublado" in url2 and not "noleg=1" in url2:
+				AddDir2("[COLOR blue][L][/COLOR]["+season+"]"+plus+" "+metasea["TVShowTitle"].encode('utf-8'), url2.replace("-dublado",""), 504, "", "", info="", isFolder=False, IsPlayable=True, background=season, metah=metasea)
+		except:
+			pass
 def animeepisvis(): #502
 	try:
 		trak = traktS()
@@ -350,6 +350,7 @@ def Baixar(): #302 Baixar
 	arquivos=[]
 	DirM = Addon.getSetting("cDir")
 	mp4 = []
+	mu = MetadataUtils()
 	for dirname, dirnames, filenames in os.walk(DirM):
 		mp4_ = []
 		for filename in filenames:
@@ -357,7 +358,6 @@ def Baixar(): #302 Baixar
 				url2 = os.path.join(dirname, filename)
 				Serie = re.compile("([^\\\|\/]+) \((\d+)\)").findall(dirname)
 				Epi = re.compile("s(\d+)e(\d+)",re.IGNORECASE).findall(filename)
-				mu = MetadataUtils()
 				mmm = mu.get_tvshow_details(title=Serie[0][0],year=Serie[0][1],ignore_cache=MUcache, lang=MUlang)
 				if not ".srt" in filename:
 					arquivos.append( mmm[-1]['imdb_id']+SEAS(Epi[0][0])+EPI(Epi[0][1]) )
@@ -369,7 +369,6 @@ def Baixar(): #302 Baixar
 	for item1 in ultimos:
 		try:
 			if not item1[0] in arquivos:
-				mu = MetadataUtils()
 				mmm = mu.get_tvshow_details(title=item1[1],year=item1[3],ignore_cache=MUcache, lang=MUlang)
 				exclui=[ item1[1],item1[3], item1[2]['season'], item1[2]['number'] ]
 				#AddDir( str(item1[2]['ids']['imdb']), item1[4], 303, "", "", isFolder=False, IsPlayable=True, background=str(item1[2]['season']), metah=mmm , episode=str(item1[2]['number']), DL="[B]"+str(item1[1])+"[/B] ")
@@ -494,6 +493,7 @@ def Next_epi(): #308
 		series = link.split("\n")
 		series.sort()
 		busca=[]
+		mu = MetadataUtils()
 		for m in series:
 			m2=m.split(",")
 			headers1 = {'Content-Type': 'application/json','trakt-api-version': '2','trakt-api-key': '888a9d79a643b0f4e9f58b5d4c2b13ee6d8bd584bc72bff8b263f184e9b5ed5d'}
@@ -502,7 +502,6 @@ def Next_epi(): #308
 				j=json.loads(response_body)
 				#mg = metahandlers.MetaData()
 				#meta = mg.get_meta('tvshow', m2[0], imdb_id=m2[2])
-				mu = MetadataUtils()
 				mmm = mu.get_tvshow_details(title=m2[0],ignore_cache=MUcache, lang=MUlang)
 				AddDir2("","", 405, iconimage, iconimage, isFolder=False, IsPlayable=True, background=str(j['season']), metah=mmm[-1], episode=str(j['number']), DL="[COLOR lightgreen]"+m2[0]+"[/COLOR] ")
 			except:
@@ -526,6 +525,7 @@ def Series(x): #60
 	#mm = m.get_tvshow_details(title="Rick And Morty",ignore_cache=MUcache, lang=MUlang)
 	#ST(mm)
 	#return
+	mg = MetadataUtils()
 	if "nfewBmAL" in x:
 		AddDir("Superflix" , "", 409, isFolder=True)
 	if "http" in x:
@@ -537,7 +537,6 @@ def Series(x): #60
 			lista = sorted(lista, key=lambda lista: lista[0])
 			for name2,id2,url2 in lista:
 				try:
-					mg = MetadataUtils()
 					mmm = mg.get_tvshow_details(title=name2.replace("*",""),tmdb_id=id2, ignore_cache=MUcache, lang=MUlang)
 					url3 = url2.split(";")
 					serv = ""
@@ -589,6 +588,7 @@ def Series2(): #69
 # --------------  NETCINE
 def ListSNC(x): #61
 	trak = traktS()
+	mu = MetadataUtils()
 	#AddDir("Reload" , "", 40, isFolder=False)
 	try:
 		url2 = re.sub('netcine\.[^\/]+', 'netcine.biz', url)
@@ -598,7 +598,6 @@ def ListSNC(x): #61
 		if "None" in background: #season
 			for season2,epis in m:
 				metah2 = eval(metah)
-				mu = MetadataUtils()
 				mmm = mu.get_tvshow_details(metah2['tmdb_id'],ignore_cache=MUcache, lang=MUlang)
 				try:
 					metasea=mergedicts(mmm[-1],mmm[int(season2)])
@@ -700,13 +699,13 @@ def PlayNextRC(): #138 Next
 	epi = re.compile('<strong>(E.+?)<\/strong>(.+?)(<br|<\/p)').findall( temps2[int( background ) -1 ])
 	E = "0"
 	ee = 0
+	meta=eval(metah)
 	for name2,url2,brp in epi:
 		ee = ee + 1
 		E = str(int(E) + 1)
 		urlm = re.compile('href\=\"(.+?)\"(.+?(Dub|Leg))?').findall(url2)
 		url2 = re.sub('(\w)-(\w)', r'\1 \2', url2)
 		try:
-			meta=eval(metah)
 			pc = 1 if meta['imdb_id']+background+str(int(E)) in trak else None
 			if pc == None:
 				global url, episode, background, playcount
@@ -718,7 +717,7 @@ def PlayNextRC(): #138 Next
 				sys.exit()
 		except:
 			pass
-	NF("Temporada Completa")
+	NF("Nenhum episódio restante")
 	sys.exit()
 def PlaySRC(qq=""): #133 Play series
 	try:
@@ -770,6 +769,7 @@ def TemporadasRC(x): #135 Episodios
 	temps = re.compile('(<span style="font-size: x-large;">(.+?)<\/span>)').findall(link)
 	inicio = re.compile('i\=(\d+)').findall(url2)
 	i = 0
+	mu = MetadataUtils()
 	if inicio:
 		for s in range(0, int(inicio[0])):
 			del temps[0]
@@ -781,7 +781,6 @@ def TemporadasRC(x): #135 Episodios
 				#if tempname[0]!="0":
 				metah2 = eval(metah)
 				#ST(metah2)
-				mu = MetadataUtils()
 				mmm = mu.get_tvshow_details(metah2['tmdb_id'],ignore_cache=MUcache, lang=MUlang)
 				try:
 					metasea=mergedicts(mmm[-1],mmm[int(tempname[0])])
@@ -789,12 +788,14 @@ def TemporadasRC(x): #135 Episodios
 				except:
 					AddDir2("Temporada " + tempname[0] + " [COLOR blue][RC][/COLOR]", url, 135, iconimage, iconimage, info="", isFolder=True, index=i, background=tempname[0], metah=metasea)
 				i+=1
+		#if Ctrakt == None:
+		#	return
+		AddDir("-------------Autoplay-------------" , "", 40, isFolder=False)
 	if x==None:
 		for b,tempname in temps:
 			tempname = re.compile('\d+').findall(tempname)
 			if tempname:
 				metah2 = eval(metah)
-				mu = MetadataUtils()
 				mmm = mu.get_tvshow_details(metah2['tmdb_id'],ignore_cache=MUcache, lang=MUlang)
 				try:
 					metasea=mergedicts(mmm[-1],mmm[int(tempname[0])])
@@ -1112,10 +1113,10 @@ def PlaySMM(): #194
 def ListSSF(): #401
 	l = common.OpenURL(url).replace("\n","").replace("\r","")
 	m = re.compile('Temporada ?.{5,6}(\d+)(.+?)\<\/Season\>').findall(l)
+	mu = MetadataUtils()
 	for temp2,cont2 in m:
 		metah2 = eval(metah)
 		#ST(metah2)
-		mu = MetadataUtils()
 		mmm = mu.get_tvshow_details(metah2['tmdb_id'],ignore_cache=MUcache, lang=MUlang)
 		try:
 			metasea=mergedicts(mmm[-1],mmm[int(temp2)])
@@ -1215,9 +1216,9 @@ def LatestSSF(): #409
 	try:
 		l = common.OpenURL("http://easytvonline.tk/rc/leg/pb2.php")
 		m = re.compile("(.+;.+)\s").findall(l)
+		mu = MetadataUtils()
 		for x in m:
 			s = x.split(";")
-			mu = MetadataUtils()
 			mmm = mu.get_tvshow_details(title=s[1],ignore_cache=MUcache, lang=MUlang)
 			redgreen = "lightgreen" if s[5] == "1" else "maroon"
 			AddDir2("","", 405, iconimage, iconimage, isFolder=False, IsPlayable=True, background=s[2], metah=mmm[-1], episode=s[3], DL="[COLOR "+redgreen+"]"+s[1]+"[/COLOR] ", playcount=s[5])
