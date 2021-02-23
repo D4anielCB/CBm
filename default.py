@@ -91,9 +91,9 @@ def Categories(): #70
 		AddDir("[COLOR white][B]["+cTxt2+"][/B][/COLOR]" , "", 52, "", "https://ckneiferinstructional.files.wordpress.com/2010/12/tv-shows-completed1.jpg", info=info2)
 	if cTxt3 and cFonte3:
 		AddDir("[COLOR white][B]["+cTxt3+"][/B][/COLOR]" , "", 53, "", "https://ckneiferinstructional.files.wordpress.com/2010/12/tv-shows-completed1.jpg", info=info2)
-	AddDir("[COLOR blue][B][Animes][/B][/COLOR]", "" ,500 , "https://walter.trakt.tv/images/shows/000/001/420/fanarts/full/cd3e5bea6c.jpg.webp", "https://walter.trakt.tv/images/shows/000/001/420/fanarts/full/cd3e5bea6c.jpg.webp")
-	AddDir("[COLOR blue][B][Animes 2][/B][/COLOR]", "" ,506 , "https://walter.trakt.tv/images/shows/000/131/598/fanarts/full/888c8578bc.jpg.webp", "https://walter.trakt.tv/images/shows/000/131/598/fanarts/full/888c8578bc.jpg.webp")
-	AddDir("[COLOR blue][B][Desenhos][/B][/COLOR]", "" ,505 , "https://walter.trakt.tv/images/shows/000/000/455/fanarts/full/e69f8ca9ad.jpg.webp", "https://walter.trakt.tv/images/shows/000/000/455/fanarts/full/e69f8ca9ad.jpg.webp")
+	AddDir("[COLOR blue][B][Animes][/B][/COLOR]", "" ,500 , "https://i.imgur.com/jBZEtpT.png", "https://walter.trakt.tv/images/shows/000/001/420/fanarts/full/cd3e5bea6c.jpg.webp")
+	AddDir("[COLOR blue][B][Animes 2][/B][/COLOR]", "" ,506 , "https://i.imgur.com/m1eRkwp.png", "https://walter.trakt.tv/images/shows/000/131/598/fanarts/full/888c8578bc.jpg.webp")
+	AddDir("[COLOR blue][B][Desenhos][/B][/COLOR]", "" ,505 , "https://i.imgur.com/8nVDjln.png", "https://walter.trakt.tv/images/shows/000/000/455/fanarts/full/e69f8ca9ad.jpg.webp")
 	AddDir("[COLOR blue][B][Filmes Animes][/B][/COLOR]", "" ,510 , "https://walter.trakt.tv/images/movies/000/350/802/fanarts/full/9d5e75ff67.jpg.webp", "https://walter.trakt.tv/images/movies/000/350/802/fanarts/full/9d5e75ff67.jpg.webp")
 	AddDir("[COLOR orange][B][Clean Cache][/B][/COLOR]", "" ,666 , "https://lh5.ggpht.com/gv992ET6R_InCoMXXwIbdRLJczqOHFfLxIeY-bN2nFq0r8MDe-y-cF2aWq6Qy9P_K-4=w300", "https://lh5.ggpht.com/gv992ET6R_InCoMXXwIbdRLJczqOHFfLxIeY-bN2nFq0r8MDe-y-cF2aWq6Qy9P_K-4=w300", isFolder=False)
 	if len(DirM) > 7:
@@ -131,6 +131,7 @@ def updateanime(): #509
 	except:
 		NF('deu ruim')
 def playanimenextvis(): #504
+	global url, episode, background, playcount
 	try:
 		trak = traktS()
 		link = common.OpenURL(url)
@@ -144,7 +145,6 @@ def playanimenextvis(): #504
 		for l in lista:
 			pc = 1 if meta['imdb_id']+str(meta['season_number'])+str(int(E)) in trak else None
 			if pc == None:
-				global url, episode, background, playcount
 				playcount = pc
 				episode = str(E)
 				url = l
@@ -560,6 +560,7 @@ def Series(x): #60
 	else:
 		AddDir("Nenhuma fonte" , "", 0, isFolder=False)
 def Series2(): #69
+	global url
 	url3 = url.split(";")
 	name2=[]
 	for x in url3:
@@ -575,7 +576,6 @@ def Series2(): #69
 		d = xbmcgui.Dialog().select("Escolha o servidor:", name2)
 	else:
 		d=0
-	global url
 	url = url3[d]
 	if "NC" in name2[d]:
 		ListSNC(background)
@@ -681,7 +681,7 @@ def PlayS(): #62
 # --------------  FIM NETCINE
 # --------------  redecanais SERIES,ANIMES,DESENHOS
 def PlayNextRC(): #138 Next
-	#global url
+	global url, episode, background, playcount
 	try:
 		url2 = re.sub('redecanais\.[^\/]+', "redecanais.cloud", url.replace("http","http") )
 		url2 = re.sub('www.', "", url2 )
@@ -710,7 +710,6 @@ def PlayNextRC(): #138 Next
 		try:
 			pc = 1 if meta['imdb_id']+background+str(int(E)) in trak else None
 			if pc == None:
-				global url, episode, background, playcount
 				playcount = pc
 				episode = E
 				url = "http://redecanais.cloud/" + urlm[0][0] if "http" not in urlm[0][0] else urlm[0][0]
@@ -1076,7 +1075,7 @@ def PlaySMM(): #194
 		listal=[]
 		legenda=""
 		for res,link,leg in cdn:
-			if link <> "":
+			if link != "":
 				listal.append(link)
 				listar.append(res)
 			if leg:
@@ -1377,7 +1376,7 @@ def AddDir(name, url, mode, iconimage='', logos='', index="", move=0, isFolder=T
 	items = []
 	if mode == 1 or mode == 2:
 		items = []
-	elif mode == 96 and logos <> "":
+	elif mode == 96 and logos != "":
 		liz.addContextMenuItems(items = [("Elementum", 'XBMC.RunPlugin(plugin://plugin.video.elementum/library/movie/play/{0}?play&doresume=true)'.format(logos)) ])
 	elif mode == 303:
 		liz.addContextMenuItems(items = [("Excluir da lista", 'XBMC.RunPlugin({0}?mode=305&logos={1})'.format(sys.argv[0], urllib.quote_plus(logos) ))])
@@ -1431,7 +1430,7 @@ def AddDir2(name, url, mode, iconimage='', logos='', index="", move=0, isFolder=
 	items = []
 	if mode == 1 or mode == 2:
 		items = []
-	elif mode == 96 and logos <> "":
+	elif mode == 96 and logos != "":
 		liz.addContextMenuItems(items = [("Elementum", 'XBMC.RunPlugin(plugin://plugin.video.elementum/library/movie/play/{0}?play&doresume=true)'.format(logos)) ])
 	elif mode == 303:
 		liz.addContextMenuItems(items = [("Excluir da lista", 'XBMC.RunPlugin({0}?mode=305&logos={1})'.format(sys.argv[0], urllib.quote_plus(logos) ))])
@@ -1500,17 +1499,17 @@ def ImdbIdioma(): #357
 	xbmc.executebuiltin("XBMC.Container.Refresh()")
 	
 def GenImdb(): #356
+	global Cat2
 	d = xbmcgui.Dialog().select("Escolha o Genero", CImdb2)
 	if d != -1:
-		global Cat2
 		Addon.setSetting("Cat2", str(d) )
 		Cat2 = d
 		xbmc.executebuiltin("XBMC.Container.Refresh()")
 			
 def Generos(): #80
+	global Cat
 	d = xbmcgui.Dialog().select("Escolha o Genero", Clista)
 	if d != -1:
-		global Cat
 		Addon.setSetting("Cat", str(d) )
 		Cat = d
 		xbmc.executebuiltin("XBMC.Container.Refresh()")
