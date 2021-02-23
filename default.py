@@ -105,7 +105,7 @@ def Categories(): #70
 		AddDir("[COLOR orange][B][Atualizar Animes][/B][/COLOR]" , "", 509, "https://accelerator-origin.kkomando.com/wp-content/uploads/2015/04/update2-970x546.jpg", "https://accelerator-origin.kkomando.com/wp-content/uploads/2015/04/update2-970x546.jpg", isFolder=False)
 # --------------  Animes
 def animesfilme(): #510
-	link = common.OpenURL("https://pastebin.com/raw/D22eAtqS")
+	link = common.OpenURL("https://raw.githubusercontent.com/D4anielCB/folder/main/filmes")
 	lista = re.compile("(.+);(.*)\s(.+)").findall(link)
 	mg = metahandlers.MetaData()
 	trak = traktM()
@@ -159,9 +159,9 @@ def playanimenextvis(): #504
 	sys.exit()
 def listanimevis(pastebin): #500
 	try:
-		link = common.OpenURL("https://pastebin.com/raw/"+pastebin).replace("\n","+")+"*"
+		link = common.OpenURL("https://raw.githubusercontent.com/D4anielCB/folder/main/"+pastebin).replace("\n","+")+"*"
 		lista = re.compile("\*?(.+?);(\d+)?;\+(.+?)\*").findall(link)
-		lista = sorted(lista, key=lambda lista: lista[0])
+		#lista = sorted(lista, key=lambda lista: lista[0])
 		animes=[]
 		mg = MetadataUtils()
 		for name2,id2,cont in lista:
@@ -182,9 +182,9 @@ def listanimevis(pastebin): #500
 		pass
 	return
 def listseavis(): #501
-	link = common.OpenURL("https://pastebin.com/raw/"+info).replace("\n","+")+"+*"
+	link = common.OpenURL("https://raw.githubusercontent.com/D4anielCB/folder/main/"+info).replace("\n","+")+"+*"
 	lista = re.compile("\*?(.+?);(\d+)?;\+(.+?)\*").findall(link)
-	lista = sorted(lista, key=lambda lista: lista[0])
+	#lista = sorted(lista, key=lambda lista: lista[0])
 	cont1 = ""
 	for name2,id2,cont2 in lista:
 		if name2 == url:
@@ -251,6 +251,16 @@ def playanimevisauto(): #
 		NF("Erro")
 		sys.exit()
 def playanimevis(): #503
+	try:
+		if XBMCPlayer().isPlaying():
+			link = common.OpenURL(url)
+			vid = re.compile('[^"|\']+\.mp4[^"|\'|\n]*').findall(link)
+			PlayUrl("", vid[0] + "|referer=http://animesvision.biz/&User-Agent=Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100110 Firefox/11.0", iconimage)
+			return
+			sys.exit()
+	except:
+		NF("Erro")
+		sys.exit()
 	try:
 		link = common.OpenURL(url)
 		vid = re.compile('[^"|\']+\.mp4[^"|\'|\n]*').findall(link)
@@ -1863,13 +1873,13 @@ elif mode == 409:
 	LatestSSF()
 	setViewS2()
 elif mode == 500: #anime
-	listanimevis("nrC8aGLT")
+	listanimevis("animes1")
 	setViewS()
 elif mode == 505: #anime
-	listanimevis("4saXzqHu")
+	listanimevis("desenhos")
 	setViewS()
 elif mode == 506: #anime
-	listanimevis("KNA1w53E")
+	listanimevis("animes2")
 	setViewS()
 elif mode == 501: #anime
 	listseavis()
