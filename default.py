@@ -110,12 +110,16 @@ def animesfilme(): #510
 	mg = metahandlers.MetaData()
 	trak = traktM()
 	lista.sort()
-	for name2,id2,url2 in lista:
-		dubleg="[COLOR yellow][D][/COLOR]" if "dublado" in url2 else "[COLOR blue][L][/COLOR]"
-		mm = mg.get_meta('movie',name2.encode("utf-8"), tmdb_id=id2)
-		pc = 1 if mm['imdb_id'] in trak else None
-		#ST(mm)
-		AddDir(dubleg+" "+name2.encode("utf-8") + " (" + str(mm['year'])+")", url2, 503, "", mm['tmdb_id'], isFolder=False, IsPlayable=True, background=name2.encode("utf-8"), metah=mm, DL="", playcount=pc)
+	try:
+		for name2,id2,url2 in lista:
+			dubleg="[COLOR yellow][D][/COLOR]" if "dublado" in url2 else "[COLOR blue][L][/COLOR]"
+			mm = mg.get_meta('movie',name2.encode("utf-8"), tmdb_id=id2)
+			pc = 1 if mm['imdb_id'] in trak else None
+			#ST(mm)
+			AddDir(dubleg+" "+name2.encode("utf-8") + " (" + str(mm['year'])+")", url2, 503, "", mm['tmdb_id'], isFolder=False, IsPlayable=True, background=name2.encode("utf-8"), metah=mm, DL="", playcount=pc)
+	except:
+		#ST(name2)
+		pass
 def updateanime(): #509
 	try:
 		import requests
