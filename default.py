@@ -232,6 +232,7 @@ def animeepisvis(): #502
 		E = 1
 		S = 1
 		i = re.compile('i\=(\d+)').findall(url)
+		f = re.compile('f\=(\d+)').findall(url)
 		if i:
 			E = int(i[0])
 		meta = eval(metah)
@@ -243,6 +244,9 @@ def animeepisvis(): #502
 			else:
 				AddDir2("" ,l, 503, "", "",  isFolder=False, IsPlayable=True, background="0", metah=meta, episode=str(S), playcount=pc)
 				S+= 1
+			if f:
+				if E > int(f[0]):
+					break
 	except:
 		pass
 def playanimevisauto(): #
