@@ -165,7 +165,6 @@ def listanimevis(pastebin): #500
 	try:
 		link = common.OpenURL("https://raw.githubusercontent.com/D4anielCB/folder/main/"+pastebin).replace("\n","+")+"*"
 		lista = re.compile("\*?(.+?);(\d+)?;\+(.+?)\*").findall(link)
-		#lista = sorted(lista, key=lambda lista: lista[0])
 		animes=[]
 		mg = MetadataUtils()
 		for name2,id2,cont in lista:
@@ -188,7 +187,6 @@ def listanimevis(pastebin): #500
 def listseavis(): #501
 	link = common.OpenURL("https://raw.githubusercontent.com/D4anielCB/folder/main/"+info).replace("\n","+")+"+*"
 	lista = re.compile("\*?(.+?);(\d+)?;\+(.+?)\*").findall(link)
-	#lista = sorted(lista, key=lambda lista: lista[0])
 	cont1 = ""
 	for name2,id2,cont2 in lista:
 		if name2 == url:
@@ -233,10 +231,14 @@ def animeepisvis(): #502
 		S = 1
 		i = re.compile('i\=(\d+)').findall(url)
 		f = re.compile('f\=(\d+)').findall(url)
+		s = re.compile('s\=(\d+)').findall(url)
+		start = 0
 		if i:
 			E = int(i[0])
 		meta = eval(metah)
-		for l in lista:
+		if s:
+			start = int(s[0])
+		for l in lista[start::]:
 			pc = 1 if meta['imdb_id']+str(meta['season_number'])+str(int(E)) in trak else None
 			if re.compile('animes.+\-\d+').findall(l):
 				AddDir2("" ,l, 503, "", "",  isFolder=False, IsPlayable=True, background=str(meta['season_number']), metah=meta, episode=str(E), playcount=pc)
