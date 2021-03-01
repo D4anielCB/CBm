@@ -101,8 +101,9 @@ def Categories(): #70
 		AddDir("[COLOR blue][B][Filmes][/B][/COLOR]", "" ,353 , "", "https://ckneiferinstructional.files.wordpress.com/2010/12/tv-shows-completed1.jpg")
 	AddDir("[COLOR orange][B][Atualizar][/B][/COLOR]" , "", 200, "https://accelerator-origin.kkomando.com/wp-content/uploads/2015/04/update2-970x546.jpg", "https://accelerator-origin.kkomando.com/wp-content/uploads/2015/04/update2-970x546.jpg", isFolder=False)
 	AddDir("[COLOR maroon][B][Atualizar Biblioteca][/B][/COLOR]" , "", 101, "https://accelerator-origin.kkomando.com/wp-content/uploads/2015/04/update2-970x546.jpg", "https://accelerator-origin.kkomando.com/wp-content/uploads/2015/04/update2-970x546.jpg", isFolder=False)
-	if Ctrakt:
-		AddDir("[COLOR orange][B][Atualizar Animes][/B][/COLOR]" , "", 509, "https://accelerator-origin.kkomando.com/wp-content/uploads/2015/04/update2-970x546.jpg", "https://accelerator-origin.kkomando.com/wp-content/uploads/2015/04/update2-970x546.jpg", isFolder=False)
+	#if Ctrakt:
+		#AddDir("[COLOR orange][B][Atualizar Animes][/B][/COLOR]" , "", 509, "https://accelerator-origin.kkomando.com/wp-content/uploads/2015/04/update2-970x546.jpg", "https://accelerator-origin.kkomando.com/wp-content/uploads/2015/04/update2-970x546.jpg", isFolder=False)
+	AddDir("[COLOR blue][B][Animes Fav][/B][/COLOR]", "" ,508 , "", "https://walter.trakt.tv/images/shows/000/000/455/fanarts/full/e69f8ca9ad.jpg.webp")
 # --------------  Animes
 def animesfilme(): #510
 	link = common.OpenURL("https://raw.githubusercontent.com/D4anielCB/folder/main/filmes")
@@ -286,6 +287,30 @@ def playanimevis(): #503
 	except:
 		NF("Erro")
 		sys.exit()
+def listfavanivis():
+	#AddDir("Reload" , "", 40, isFolder=False)
+	mg = MetadataUtils()
+	try:
+		folder = os.path.dirname(os.path.dirname( addon_data_dir ))
+		folder = os.path.dirname(os.path.dirname( folder ))
+		folder = cacheDir = os.path.join(folder, "userdata")
+		fav = os.path.join(folder, "favourites.xml")
+		file = open(fav, "r").read()
+		lista = re.compile('url=(.+?)\&.+?tmdb_id%27%3A\+%27(\d+).+?season_number%27%3A\+(\d+)').findall( file )
+		for url,id,season in lista:
+			try:
+				url2 = urllib.unquote_plus(url)
+				#ST(url2)
+				mmm = mg.get_tvshow_details(title="",tmdb_id=id, ignore_cache=MUcache, lang=MUlang)
+				metasea=mergedicts(mmm[-1],mmm[int(season)])
+				dubleg="[COLOR yellow][D][/COLOR]" if "dublado" in url2 else "[COLOR blue][L][/COLOR]"
+				plus = "+" if "i=" in url2 else ""
+				AddDir2(dubleg+"["+season+"]"+plus+" "+metasea["TVShowTitle"].encode('utf-8'), url2, 502, "", "", info="", isFolder=True, background=season, metah=metasea)
+			except:
+				pass
+		file.close()
+	except:
+		pass
 # --------------  Trakt
 def traktS():
 	if not Ctrakt:
@@ -1905,6 +1930,9 @@ elif mode == 509:
 	updateanime()
 elif mode == 510:
 	animesfilme()
+	setViewM2()
+elif mode == 508:
+	listfavanivis()
 	setViewM2()
 xbmcplugin.endOfDirectory(int(sys.argv[1]))
 #checkintegritycbmeta
