@@ -195,9 +195,9 @@ def listseavis(): #501
 			cont1 = cont2
 	lista = re.compile("(\d+)?;?(.+?)\+").findall(cont1)
 	mg = MetadataUtils()
+	meta = eval(metah)
 	for season,url2 in lista:
 		try:
-			meta = eval(metah)
 			mmm = mg.get_tvshow_details(title="",tmdb_id=meta['tmdb_id'], ignore_cache=MUcache, lang=MUlang)
 			season = "1" if season == "" else season
 			metasea=mergedicts(meta,mmm[int(season)])
@@ -213,7 +213,6 @@ def listseavis(): #501
 	AddDir("---------- Autoplay ----------" , "", 40, isFolder=False)
 	for season,url2 in lista:
 		try:
-			meta = eval(metah)
 			mmm = mg.get_tvshow_details(title="",tmdb_id=meta['tmdb_id'], ignore_cache=MUcache, lang=MUlang)
 			season = "1" if season == "" else season
 			metasea=mergedicts(meta,mmm[int(season)])
@@ -1308,11 +1307,12 @@ def baixarsf(link=""):
 # ----------------- Inicio https://www.erai-raws.info/
 def eraianime(): #520
 	#AddDir("Reload" , "", 40, isFolder=False)
+	AddDir("[B][Fav][/B]" , "", 522, isFolder=True)
 	link = common.OpenURL("https://www.erai-raws.info/anime-list/")
 	lista = re.compile("href\=\"([^\"]+)\" title\=\"([^\"]+)\"").findall(link)
 	for url2,title2 in lista:
 		AddDir(title2 , url2, 521, isFolder=True)
-def erailistepi():
+def erailistepi(): #521
 	AddDir("Reload" , "", 40, isFolder=False)
 	try:
 		link = common.OpenURL("https://www.erai-raws.info/anime-list/"+url)
@@ -1329,6 +1329,57 @@ def erailistepi():
 				AddDir("[COLOR yellow]" +title2[0]+ "[/COLOR]", "plugin://plugin.video.elementum/play?uri="+magnet, 3, isFolder=False, IsPlayable=True)
 	except:
 		pass
+def listreaianimemeta(): #522
+	link = common.OpenURL("https://raw.githubusercontent.com/D4anielCB/folder/main/erai-raws")
+	lista = re.compile("(.+);(.*)\s(\d+)?;?(.+)").findall(link)
+	mg = MetadataUtils()
+	for title,id,season,url2 in lista:
+		try:
+			#meta = eval(metah)
+			mmm = mg.get_tvshow_details(title=title,tmdb_id=id, ignore_cache=MUcache, lang=MUlang)
+			season = "1" if season == "" else season
+			metasea=mergedicts(mmm[-1],mmm[int(season)])
+			AddDir2("["+season+"] "+metasea["TVShowTitle"], url2, 523, iconimage, iconimage, info="", isFolder=True, background=season, metah=metasea)
+		except:
+			pass
+def retsitereai(action,anime):
+	try:
+		import requests
+		url = 'https://www.erai-raws.info/wp-admin/admin-ajax.php'
+		#q = {'anime-list':'shingeki-no-kyojin-the-final-season','error':'','m':'','p':0,'post_parent':'','subpost':'','subpost_id':'','attachment':'','attachment_id':0,'name':'','pagename':'','page_id':0,'second':'','minute':'','hour':'','day':0,'monthnum':0,'year':0,'w':0,'category_name':'','tag':'','cat':'','tag_id':'','author':'','author_name':'','feed':'','tb':'','paged':0,'meta_key':'','meta_value':'','preview':'','s':'','sentence':'','title':'','fields':'','menu_order':'','embed':'','category__in':[],'category__not_in':[],'category__and':[],'post__in':[],'post__not_in':[],'post_name__in':[],'tag__in':[],'tag__not_in':[],'tag__and':[],'tag_slug__in':[],'tag_slug__and':[],'post_parent__in':[],'post_parent__not_in':[],'author__in':[],'author__not_in':[],'ignore_sticky_posts':False,'suppress_filters':False,'cache_results':True,'update_post_term_cache':True,'lazy_load_term_meta':True,'update_post_meta_cache':True,'post_type':'','posts_per_page':5,'nopaging':False,'comments_per_page':'50','no_found_rows':False,'taxonomy':'anime-list','term':'shingeki-no-kyojin-the-final-season','order':'DESC'}
+		q = '{"anime-list":"'+anime+'","posts_per_page":50,"order":"DESC"}'
+		qq =json.loads(q)
+		#myobj = {'action':'load_more_5', 'query': 'anime-list%22%3A%22shingeki-no-kyojin-the-final-season%22%2C%22error%22%3A%22%22%2C%22m%22%3A%22%22%2C%22p%22%3A0%2C%22post_parent%22%3A%22%22%2C%22subpost%22%3A%22%22%2C%22subpost_id%22%3A%22%22%2C%22attachment%22%3A%22%22%2C%22attachment_id%22%3A0%2C%22name%22%3A%22%22%2C%22pagename%22%3A%22%22%2C%22page_id%22%3A0%2C%22second%22%3A%22%22%2C%22minute%22%3A%22%22%2C%22hour%22%3A%22%22%2C%22day%22%3A0%2C%22monthnum%22%3A0%2C%22year%22%3A0%2C%22w%22%3A0%2C%22category_name%22%3A%22%22%2C%22tag%22%3A%22%22%2C%22cat%22%3A%22%22%2C%22tag_id%22%3A%22%22%2C%22author%22%3A%22%22%2C%22author_name%22%3A%22%22%2C%22feed%22%3A%22%22%2C%22tb%22%3A%22%22%2C%22paged%22%3A0%2C%22meta_key%22%3A%22%22%2C%22meta_value%22%3A%22%22%2C%22preview%22%3A%22%22%2C%22s%22%3A%22%22%2C%22sentence%22%3A%22%22%2C%22title%22%3A%22%22%2C%22fields%22%3A%22%22%2C%22menu_order%22%3A%22%22%2C%22embed%22%3A%22%22%2C%22category__in%22%3A%5B%5D%2C%22category__not_in%22%3A%5B%5D%2C%22category__and%22%3A%5B%5D%2C%22post__in%22%3A%5B%5D%2C%22post__not_in%22%3A%5B%5D%2C%22post_name__in%22%3A%5B%5D%2C%22tag__in%22%3A%5B%5D%2C%22tag__not_in%22%3A%5B%5D%2C%22tag__and%22%3A%5B%5D%2C%22tag_slug__in%22%3A%5B%5D%2C%22tag_slug__and%22%3A%5B%5D%2C%22post_parent__in%22%3A%5B%5D%2C%22post_parent__not_in%22%3A%5B%5D%2C%22author__in%22%3A%5B%5D%2C%22author__not_in%22%3A%5B%5D%2C%22ignore_sticky_posts%22%3Afalse%2C%22suppress_filters%22%3Afalse%2C%22cache_results%22%3Atrue%2C%22update_post_term_cache%22%3Atrue%2C%22lazy_load_term_meta%22%3Atrue%2C%22update_post_meta_cache%22%3Atrue%2C%22post_type%22%3A%22%22%2C%22posts_per_page%22%3A9%2C%22nopaging%22%3Afalse%2C%22comments_per_page%22%3A%2250%22%2C%22no_found_rows%22%3Afalse%2C%22taxonomy%22%3A%22anime-list%22%2C%22term%22%3A%22shingeki-no-kyojin-the-final-season%22%2C%22order%22%3A%22ASC%22%7D&page=1'}
+		myobj = {'action':action, 'page': 0, 'query':  q }
+		head = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.62 Safari/537.36', 'Accept-Encoding': 'identity', 'Content-Type': 'application/x-www-form-urlencoded', 'DNT': '1'}
+		resp = requests.post(url, data = myobj, headers=head)
+		return resp.text
+	except:
+		return ""
+def listreaiepimeta(): #523
+	AddDir("Reload" , "", 40, isFolder=False)
+	loads = ["load_more_0","load_more_5"]
+	#loads = ["load_more_0"]
+	trak = traktS()
+	meta = eval(metah)
+	for l in loads:
+		text = retsitereai(l,url)
+		try:
+			lista = re.compile("magnet:\?.+?1080p[^\"]+").findall(text)
+			for magnet in lista:
+				magnet2 = urllib.unquote(magnet.encode("utf-8"))
+				E = re.compile("\- ?(\d+)").findall(magnet2)
+				title2 = re.compile("dn=(.+?)\&").findall(magnet2)
+				hevec = "[+] " if "HEVC" in magnet else ""
+				try:
+					pc = 1 if meta['imdb_id']+str(meta['season_number'])+str(int(E[0])) in trak else None
+					AddDir2("" ,l, 503, "", "",  isFolder=False, IsPlayable=True, background=background, metah=meta, episode=E[0], playcount=pc, DL=hevec)
+				except:
+					AddDir("[COLOR yellow]" +title2[0]+ "[/COLOR]", "plugin://plugin.video.elementum/play?uri="+magnet, 3, isFolder=False, IsPlayable=True)
+			AddDir("------------------------------------------------------------------" , "", 40, isFolder=False)
+		except:
+			pass
+# ----------------- Fim https://www.erai-raws.info/
 def PlayUrl(name, url, iconimage=None, info='', sub=''):
 	#if DirM in url:
 		#sub=re.sub('\..{3}$', '.srt', url)
@@ -1966,5 +2017,11 @@ elif mode == 520:
 elif mode == 521:
 	erailistepi()
 	setViewM()
+elif mode == 522:
+	listreaianimemeta()
+	setViewS()
+elif mode == 523:
+	listreaiepimeta()
+	setViewS2()
 xbmcplugin.endOfDirectory(int(sys.argv[1]))
 #checkintegritycbmeta
