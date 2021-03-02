@@ -1373,7 +1373,7 @@ def listreaiepimeta(): #523
 				hevec = "[+] " if "HEVC" in magnet else ""
 				try:
 					pc = 1 if meta['imdb_id']+str(meta['season_number'])+str(int(E[0])) in trak else None
-					AddDir2("" ,l, 503, "", "",  isFolder=False, IsPlayable=True, background=background, metah=meta, episode=E[0], playcount=pc, DL=hevec)
+					AddDir2("" ,"plugin://plugin.video.elementum/play?uri="+magnet, 3, "", "",  isFolder=False, IsPlayable=True, background=background, metah=meta, episode=E[0], playcount=pc, DL=hevec)
 				except:
 					AddDir("[COLOR yellow]" +title2[0]+ "[/COLOR]", "plugin://plugin.video.elementum/play?uri="+magnet, 3, isFolder=False, IsPlayable=True)
 			AddDir("------------------------------------------------------------------" , "", 40, isFolder=False)
