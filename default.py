@@ -104,6 +104,7 @@ def Categories(): #70
 	#if Ctrakt:
 		#AddDir("[COLOR orange][B][Atualizar Animes][/B][/COLOR]" , "", 509, "https://accelerator-origin.kkomando.com/wp-content/uploads/2015/04/update2-970x546.jpg", "https://accelerator-origin.kkomando.com/wp-content/uploads/2015/04/update2-970x546.jpg", isFolder=False)
 	AddDir("[COLOR blue][B][Animes Fav][/B][/COLOR]", "" ,508 , "", "https://walter.trakt.tv/images/shows/000/000/455/fanarts/full/e69f8ca9ad.jpg.webp")
+	AddDir("[COLOR green][B][Animes Torrents][/B][/COLOR]", "" ,520 , "", "https://walter.trakt.tv/images/shows/000/000/455/fanarts/full/e69f8ca9ad.jpg.webp")
 # --------------  Animes
 def animesfilme(): #510
 	link = common.OpenURL("https://raw.githubusercontent.com/D4anielCB/folder/main/filmes")
@@ -287,7 +288,7 @@ def playanimevis(): #503
 	except:
 		NF("Erro")
 		sys.exit()
-def listfavanivis():
+def listfavanivis(): #508
 	#AddDir("Reload" , "", 40, isFolder=False)
 	mg = MetadataUtils()
 	try:
@@ -299,13 +300,14 @@ def listfavanivis():
 		lista = re.compile('url=(.+?)\&.+?tmdb_id%27%3A\+%27(\d+).+?season_number%27%3A\+(\d+)').findall( file )
 		for url,id,season in lista:
 			try:
-				url2 = urllib.unquote_plus(url)
-				#ST(url2)
-				mmm = mg.get_tvshow_details(title="",tmdb_id=id, ignore_cache=MUcache, lang=MUlang)
-				metasea=mergedicts(mmm[-1],mmm[int(season)])
-				dubleg="[COLOR yellow][D][/COLOR]" if "dublado" in url2 else "[COLOR blue][L][/COLOR]"
-				plus = "+" if "i=" in url2 else ""
-				AddDir2(dubleg+"["+season+"]"+plus+" "+metasea["TVShowTitle"].encode('utf-8'), url2, 502, "", "", info="", isFolder=True, background=season, metah=metasea)
+				if "animesvision.biz" in url:
+					url2 = urllib.unquote_plus(url)
+					#ST(url2)
+					mmm = mg.get_tvshow_details(title="",tmdb_id=id, ignore_cache=MUcache, lang=MUlang)
+					metasea=mergedicts(mmm[-1],mmm[int(season)])
+					dubleg="[COLOR yellow][D][/COLOR]" if "dublado" in url2 else "[COLOR blue][L][/COLOR]"
+					plus = "+" if "i=" in url2 else ""
+					AddDir2(dubleg+"["+season+"]"+plus+" "+metasea["TVShowTitle"].encode('utf-8'), url2, 502, "", "", info="", isFolder=True, background=season, metah=metasea)
 			except:
 				pass
 		file.close()
@@ -1303,6 +1305,30 @@ def baixarsf(link=""):
 	progress.close()
 	return py
 # ----------------- FIM Superflix
+# ----------------- Inicio https://www.erai-raws.info/
+def eraianime(): #520
+	#AddDir("Reload" , "", 40, isFolder=False)
+	link = common.OpenURL("https://www.erai-raws.info/anime-list/")
+	lista = re.compile("href\=\"([^\"]+)\" title\=\"([^\"]+)\"").findall(link)
+	for url2,title2 in lista:
+		AddDir(title2 , url2, 521, isFolder=True)
+def erailistepi():
+	AddDir("Reload" , "", 40, isFolder=False)
+	try:
+		link = common.OpenURL("https://www.erai-raws.info/anime-list/"+url)
+		lista = re.compile("magnet:\?.+?1080p[^\"]+").findall(link)
+		#ST(lista )
+		for magnet in lista:
+			magnet2 = urllib.unquote(magnet.encode("utf-8"))
+			#ST(magnet2)
+			title2 = re.compile("dn=(.+?)\&").findall(magnet2)
+			#ST(title2)
+			if "HEVC" in magnet:
+				AddDir("[COLOR blue]" +title2[0]+ "[/COLOR]", "plugin://plugin.video.elementum/play?uri="+magnet, 3, isFolder=False, IsPlayable=True)
+			else:
+				AddDir("[COLOR yellow]" +title2[0]+ "[/COLOR]", "plugin://plugin.video.elementum/play?uri="+magnet, 3, isFolder=False, IsPlayable=True)
+	except:
+		pass
 def PlayUrl(name, url, iconimage=None, info='', sub=''):
 	#if DirM in url:
 		#sub=re.sub('\..{3}$', '.srt', url)
@@ -1934,5 +1960,11 @@ elif mode == 510:
 elif mode == 508:
 	listfavanivis()
 	setViewM2()
+elif mode == 520:
+	eraianime()
+	setViewM()
+elif mode == 521:
+	erailistepi()
+	setViewM()
 xbmcplugin.endOfDirectory(int(sys.argv[1]))
 #checkintegritycbmeta
