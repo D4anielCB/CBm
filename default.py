@@ -1314,21 +1314,42 @@ def eraianime(): #520
 		AddDir(title2 , url2, 521, isFolder=True)
 def erailistepi(): #521
 	AddDir("Reload" , "", 40, isFolder=False)
+	loads = ["load_more_0","load_more_5"]
+	#return
+	site = 0
+	for l in loads:
+		text = retsitereai(l,url)
+		try:
+			lista = re.compile("magnet:\?.+?1080p[^\"]+").findall(text)
+			#ST(lista)
+			for magnet in lista:
+				magnet2 = urllib.unquote(magnet.encode("utf-8"))
+				#ST(magnet2)
+				E = re.compile("\- ?(\d+)").findall(magnet2)
+				title2 = re.compile("dn=(.+?)\&").findall(magnet2)
+				hevec = "[+] " if "HEVC" in magnet else ""
+				AddDir(hevec+"[COLOR white]" +title2[0].replace("[Erai-raws] ","")+ "[/COLOR]", "plugin://plugin.video.elementum/play?uri="+magnet, 3, isFolder=False, IsPlayable=True)
+			if text:
+				site+=1
+				AddDir("------------------------------------------------------------------" , "", 40, isFolder=False)
+		except:
+			pass
+	if site > 0:
+		return
 	try:
 		link = common.OpenURL("https://www.erai-raws.info/anime-list/"+url)
-		lista = re.compile("magnet:\?.+?1080p[^\"]+").findall(link)
-		#ST(lista )
+		lista = re.compile("magnet:\?.+?[^\"]+").findall(link)
 		for magnet in lista:
 			magnet2 = urllib.unquote(magnet.encode("utf-8"))
 			#ST(magnet2)
+			E = re.compile("\- ?(\d+)").findall(magnet2)
 			title2 = re.compile("dn=(.+?)\&").findall(magnet2)
-			#ST(title2)
-			if "HEVC" in magnet:
-				AddDir("[COLOR blue]" +title2[0]+ "[/COLOR]", "plugin://plugin.video.elementum/play?uri="+magnet, 3, isFolder=False, IsPlayable=True)
-			else:
-				AddDir("[COLOR yellow]" +title2[0]+ "[/COLOR]", "plugin://plugin.video.elementum/play?uri="+magnet, 3, isFolder=False, IsPlayable=True)
+			hevec = "[+] " if "HEVC" in magnet else ""
+			AddDir("[COLOR white]" +title2[0].replace("[Erai-raws] ","")+ "[/COLOR]", "plugin://plugin.video.elementum/play?uri="+magnet, 3, isFolder=False, IsPlayable=True)
+		if text:
+			AddDir("------------------------------------------------------------------" , "", 40, isFolder=False)
 	except:
-		pass
+		ST(1)
 def listreaianimemeta(): #522
 	link = common.OpenURL("https://raw.githubusercontent.com/D4anielCB/folder/main/erai-raws")
 	lista = re.compile("(.+);(.*)\s(\d+)?;?(.+)").findall(link)
@@ -1342,7 +1363,7 @@ def listreaianimemeta(): #522
 			AddDir2("["+season+"] "+metasea["TVShowTitle"], url2, 523, iconimage, iconimage, info="", isFolder=True, background=season, metah=metasea)
 		except:
 			pass
-def retsitereai(action,anime):
+def retsitereai(action,anime): ############
 	try:
 		import requests
 		url = 'https://www.erai-raws.info/wp-admin/admin-ajax.php'
@@ -1359,7 +1380,6 @@ def retsitereai(action,anime):
 def listreaiepimeta(): #523
 	AddDir("Reload" , "", 40, isFolder=False)
 	loads = ["load_more_0","load_more_5"]
-	#loads = ["load_more_0"]
 	trak = traktS()
 	meta = eval(metah)
 	for l in loads:
@@ -2016,7 +2036,7 @@ elif mode == 520:
 	setViewM()
 elif mode == 521:
 	erailistepi()
-	setViewM()
+	setViewS2()
 elif mode == 522:
 	listreaianimemeta()
 	setViewS()
