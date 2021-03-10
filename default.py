@@ -1002,12 +1002,11 @@ def Elementum(): #97
 def PlayUrl2(name, url, iconimage=None, info='', sub='', metah=''):
 	RS = ReadSeek(metah['imdb_id'])
 	url = re.sub('\.mp4$', '.mp4?play', url)
-	url = common.getFinalUrl(url)
+	#url = common.getFinalUrl(url)
 	xbmc.log('--- Playing url2 "{0}". {1}'.format(name, url), 2)
 	listitem = xbmcgui.ListItem(path=url)
 	#listitem = xbmcgui.ListItem(path="D:\S\Shows\Under Pressure (2017)\SOBPRSAOS02E02.mp4")
 	if metah:
-		ST(metah)
 		listitem.setProperty('StartPercent', RS)
 		listitem.setArt({"thumb": metah['cover_url'], "poster": metah['cover_url'], "banner": metah['cover_url'], "fanart": metah['backdrop_url'] })
 		listitem.setInfo(type="Video", infoLabels=metah)
@@ -1323,12 +1322,12 @@ def erailistepi(): #521
 				lista = re.compile("http.+?1080p.+?.torrent").findall(text)
 			for magnet in lista:
 				magnet2 = urllib.unquote(magnet.encode("utf-8"))
-				title2 = re.compile("dn=(.+?)\&").findall(magnet2)
+				title2 = re.compile("dn=(.+?)(\&|$)").findall(magnet2)
 				if not title2:
 					title2 = magnet2.split("/")
-					title2 = [title2[len(title2)-1]]
+					title2 = [[title2[len(title2)-1]]]
 				hevec = "[+] " if "HEVC" in magnet else ""
-				AddDir(hevec+"[COLOR white]" +title2[0].replace("[Erai-raws] ","")+ "[/COLOR]", "plugin://plugin.video.elementum/play?uri="+magnet, 3, isFolder=False, IsPlayable=True)
+				AddDir(hevec+"[COLOR white]" +title2[0][0].replace("[Erai-raws] ","")+ "[/COLOR]", "plugin://plugin.video.elementum/play?uri="+magnet, 3, isFolder=False, IsPlayable=True)
 				#AddDir("[COLOR yellow]" +title2[0]+ "[/COLOR]", "plugin://plugin.video.elementum/play?uri="+magnet, 3, isFolder=False, IsPlayable=True)
 			if text:
 				AddDir("------------------------------------------------------------------" , "", 40, isFolder=False)
@@ -1375,13 +1374,13 @@ def listreaiepimeta(): #523
 			for magnet in lista:
 				magnet2 = urllib.unquote(magnet.encode("utf-8"))
 				E = re.compile("\- ?(\d+)").findall(magnet2)
-				title2 = re.compile("dn=(.+?)\&").findall(magnet2)
+				title2 = re.compile("dn=(.+?)(\&|$)").findall(magnet2)
 				hevec = "[+] " if "HEVC" in magnet else ""
 				try:
 					pc = 1 if meta['imdb_id']+str(meta['season_number'])+str(int(E[0])) in trak else None
 					AddDir2("" ,"plugin://plugin.video.elementum/play?uri="+magnet, 3, "", "",  isFolder=False, IsPlayable=True, background=background, metah=meta, episode=E[0], playcount=pc, DL=hevec)
 				except:
-					AddDir("[COLOR yellow]" +title2[0]+ "[/COLOR]", "plugin://plugin.video.elementum/play?uri="+magnet, 3, isFolder=False, IsPlayable=True)
+					AddDir("[COLOR yellow]" +title2[0][0]+ "[/COLOR]", "plugin://plugin.video.elementum/play?uri="+magnet, 3, isFolder=False, IsPlayable=True)
 			AddDir("------------------------------------------------------------------" , "", 40, isFolder=False)
 		except:
 			pass
@@ -1390,7 +1389,7 @@ def PlayUrl(name, url, iconimage=None, info='', sub=''):
 	#if DirM in url:
 		#sub=re.sub('\..{3}$', '.srt', url)
 	#url = re.sub('\.mp4$', '.mp4?play', url)
-	url = common.getFinalUrl(url)
+	#url = common.getFinalUrl(url)
 	xbmc.log('--- Playing "{0}". {1}'.format(name, url), 2)
 	listitem = xbmcgui.ListItem(path=url)
 	if metah:
