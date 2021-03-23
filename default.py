@@ -140,7 +140,7 @@ def playanimenextvis(): #504
 	global url, episode, background, playcount
 	try:
 		trak = traktS()
-		link = common.OpenURL(url)
+		link = common.OpenURL(url.replace("http:","https:"))
 		lista = re.compile("[^']+\/download").findall(link)
 		E = 1
 		i = re.compile('i\=(\d+)').findall(url)
@@ -226,7 +226,7 @@ def listseavis(): #501
 def animeepisvis(): #502
 	try:
 		trak = traktS()
-		link = common.OpenURL(url)
+		link = common.OpenURL(url.replace("http:","https:"))
 		lista = re.compile("[^']+\/download").findall(link)
 		E = 1
 		S = 1
